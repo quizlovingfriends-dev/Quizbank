@@ -1,0 +1,68 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# QuizVault — .gitignore
+# Keeps the repo lean. Anything not needed for Netlify deploy or pipeline
+# version-control belongs here.
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Massive accidental inclusions
+Git/                                # 356MB installed Git for Windows binary
+gsap-skills-main/                   # 225KB GSAP docs we cloned for reference
+node_modules/
+scratch/
+images_originals_backup/            # raw originals before optimization
+
+# Build artifacts / deploy zips
+quiz-automator/deploys/
+quiz-automator/logs/
+quiz-automator/processed/           # user's archived quiz files (private)
+quiz-automator/input/               # incoming quiz files (private)
+*.zip
+
+# Backups
+*.bak
+*.bak.*
+data/*.bak*
+quiz-automator/data/*.bak*
+
+# Caches
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor leftovers
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Debug / scratch files
+*.log
+*.tmp
+extract_*.py                        # one-off debug scripts in root
+debug_*.log
+debug_*.txt
+extracted_*.json
+blocks_debug.txt
+a631fa48*.pdf                       # random PDF dropped in root
+check_fitz.py
+quiz_card.html                      # old template
+
+# API keys must never be committed
+quiz-automator/config.json          # has gemini/pexels/github tokens
+
+# Health/audit one-off artifacts
+quiz-automator/bug_audit.json
+quiz-automator/data/common_words.txt
+
+# Old roadmap / phase prompts (kept locally, not deployed)
+# Comment these out if you want them in the repo for docs purposes:
+PHASE*_PROMPT.md
+BRUTALIST_PROMPT.md
+PROMPTS_README.md

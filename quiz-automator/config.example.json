@@ -1,0 +1,20 @@
+{
+  "_comment": "Copy this to config.json and fill in your own values. config.json is git-ignored.",
+  "site_folder": "D:/QUIZBANK",
+  "input_folder": "./input",
+  "processed_folder": "./processed",
+  "pexels_api_key": "PASTE_YOUR_PEXELS_KEY_HERE",
+  "gemini_api_key": "PASTE_YOUR_GEMINI_KEY_HERE_OR_LEAVE_BLANK",
+  "github_models_token": "PASTE_YOUR_GITHUB_PAT_HERE_OR_LEAVE_BLANK",
+  "openrouter_api_key": "PASTE_YOUR_OPENROUTER_KEY_HERE_OR_LEAVE_BLANK",
+  "poll_interval_seconds": 30,
+  "min_questions_required": 3,
+  "topic_keywords": {
+    "sports": ["sport", "cricket", "football", "olympic", "player", "athlete", "match", "team", "stadium"],
+    "wildlife": ["animal", "tiger", "lion", "bird", "wildlife", "nature", "predator", "flower", "plant", "species"],
+    "history": ["history", "empire", "ancient", "century", "dynasty", "war", "revolution", "battle", "king", "queen"],
+    "politics": ["minister", "politics", "government", "election", "president", "parliament", "treaty", "law"],
+    "cuisines": ["food", "dish", "recipe", "ingredient", "cuisine", "taste", "cook", "restaurant", "spice"],
+    "current-affairs": ["2023", "2024", "2025", "2026", "recent", "news", "latest", "current", "today", "launched", "awarded"]
+  }
+}
