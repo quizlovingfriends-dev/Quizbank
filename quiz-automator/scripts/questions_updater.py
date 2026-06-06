@@ -241,10 +241,23 @@ def main():
         print("No questions to add.")
         sys.exit(0)
 
-    # ── Pre-flight: validate + dedupe ───────────────────────────────────────
+    # ── Pre-flight: validate + dedupe + QUALITY GATE ─────────────────────────
     existing_norms = set(parse_existing_questions(original_js))
     accepted = []
     rejected = []
+    pending = []  # quality_gate verdict: needs human review
+
+    # Import the gate + queue (deferred so this script still loads w/o them)
+    try:
+        from quality_gate import classify_question
+        from pending_queue import add_to_queue
+        gate_available = True
+    except Exception as _e:
+        print(f"[gate] disabled: {_e}", file=sys.stderr)
+        gate_available = False
+
+    source_meta = {"loaded_from": sys.argv[1] if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]) else "stdin"}
+
     for q in new_questions:
         ok, reason = validate_question(q)
         if not ok:
@@ -253,6 +266,19 @@ def main():
         if is_duplicate(q.get("question_text", ""), existing_norms):
             rejected.append((q.get("question_text", "")[:60], "duplicate of existing"))
             continue
+
+        # Quality gate — score & route
+        if gate_available:
+            gate = classify_question(q)
+            if gate["verdict"] == "rejected":
+                rejected.append((q.get("question_text", "")[:60],
+                                 f"gate rejected (score={gate['score']}): {gate['issues'][:2]}"))
+                continue
+            if gate["verdict"] == "pending":
+                add_to_queue(q, gate, source="watcher", source_meta=source_meta)
+                pending.append((q.get("question_text", "")[:60], gate["score"]))
+                continue
+
         accepted.append(q)
         existing_norms.add(normalize_for_compare(q.get("question_text", ""))[:60])
 
@@ -261,8 +287,13 @@ def main():
         for snippet, why in rejected[:20]:
             print(f"  - [{why}] {snippet}", file=sys.stderr)
 
+    if pending:
+        print(f"Sent {len(pending)} question(s) to PENDING_REVIEW queue:", file=sys.stderr)
+        for snippet, score in pending[:10]:
+            print(f"  - [score={score}] {snippet}", file=sys.stderr)
+
     if not accepted:
-        print("No valid new questions to add (all were rejected).")
+        print(f"No questions auto-approved (rejected={len(rejected)} pending={len(pending)}).")
         sys.exit(0)
 
     new_questions = accepted
