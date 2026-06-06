@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZVAULT — Knowledge Terminal</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- SEO -->
+    <meta name="description" content="A curated GK question bank with smart practice mode.">
+    <meta name="keywords" content="quiz, general knowledge, GK, trivia, practice, question bank, study">
+    <meta name="author" content="QuizVault">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QuizVault — GK Question Bank">
+    <meta property="og:description" content="A curated GK question bank with smart practice mode.">
+    <meta property="og:image" content="images/og_card.png">
+    <meta property="og:url" content="https://quizvault.netlify.app/">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QuizVault — GK Question Bank">
+    <meta name="twitter:description" content="A curated GK question bank with smart practice mode.">
+    <meta name="twitter:image" content="images/og_card.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+<link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/favicon-192.png">
+</head>
+<body>
+    <div class="screen-container">
+        <!-- NAVBAR -->
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <a aria-label="QuizVault Home" class="navbar-logo" href="index.html" role="menuitem">
+                QUIZ<span>VAULT</span>
+            </a>
+            <div class="navbar-links" role="menubar">
+                <a class="navbar-link active" href="index.html" role="menuitem" aria-current="page">HOME</a>
+                <a class="navbar-link" href="questionbank.html" role="menuitem">BANK</a>
+                <a class="navbar-link" href="wiki.html" role="menuitem">WIKI</a>
+                <a class="navbar-link" href="analytics.html" role="menuitem">STATS</a>
+            <span id="site-health" class="health-badge" title="Site status">●</span></div>
+        </nav>
+
+        <main class="landing-hero">
+            <div class="title-wrapper">
+                <div class="eyebrow" aria-hidden="true">QUIZ MACHINE / V2.0</div>
+                <h1 class="title-bottom" id="main-heading">BUILT FOR<br>THE OBSESSED.</h1>
+                
+            </div>
+
+            <div style="display: flex; gap: 16px;">
+                <button class="btn" id="hero-practice-btn" aria-haspopup="dialog">START_PRACTICE ?</button>
+                <a href="questionbank.html" role="menuitem" class="btn btn-ghost" style="text-decoration: none;" aria-label="Browse Question Database">BROWSE_DB ?</a>
+            </div>
+        
+            <div id="last-updated-stamp" style="font-size: 11px; color: var(--grey); margin-top: 24px; letter-spacing: 1px;">
+              LAST_DATABASE_SYNC: <span id="last-sync-time">—</span>
+            </div>
+        </main>
+
+        <!-- STATS BAR -->
+        <div class="stats-bar" id="stats-bar">
+            <!-- Populated by home.js -->
+        </div>
+    </div>
+
+    
+<!-- DO NOT REMOVE: DATA LOADING -->
+    <script src="data/questions.js"></script>
+    <script src="js/error-boundary.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/sanitizer.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/youtube-embed.js"></script>
+    <script src="js/cloud-sync.js"></script>
+    <script src="js/sm2.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/practice.js"></script>
+    
+    <script>
+    (function() {
+      var badge = document.getElementById('site-health');
+      if (!badge) return;
+      var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
+      if (qCount === 0) {
+        badge.classList.add('error');
+        badge.title = 'CRITICAL: questions.js failed to load (0 questions)';
+      } else if (qCount < 50) {
+        badge.classList.add('warning');
+        badge.title = qCount + ' questions loaded (low)';
+      } else {
+        badge.title = qCount + ' questions loaded — OK';
+      }
+    })();
+    </script>
+    <script src="js/onboarding.js"></script>
+    <!-- GSAP Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="js/animations.js"></script>
+
+    <script src="js/command-palette.js"></script>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+}
+</script>
+</body></html>

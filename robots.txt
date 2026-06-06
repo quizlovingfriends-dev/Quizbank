@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://quizvault.netlify.app/sitemap.xml

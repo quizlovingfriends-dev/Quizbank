@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANK — QUIZVAULT</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- SEO -->
+    <meta name="description" content="Browse and search our curated GK database.">
+    <meta name="keywords" content="quiz, general knowledge, GK, trivia, practice, question bank, study">
+    <meta name="author" content="QuizVault">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QuizVault — Browse Questions">
+    <meta property="og:description" content="Browse and search our curated GK database.">
+    <meta property="og:image" content="images/og_card.png">
+    <meta property="og:url" content="https://quizvault.netlify.app/">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QuizVault — Browse Questions">
+    <meta name="twitter:description" content="Browse and search our curated GK database.">
+    <meta name="twitter:image" content="images/og_card.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+<link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/favicon-192.png">
+</head>
+<body>
+    <div class="screen-container">
+        <!-- NAVBAR -->
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <a aria-label="QuizVault Home" class="navbar-logo" href="index.html" role="menuitem">
+                QUIZ<span>VAULT</span>
+            </a>
+            <div class="navbar-links" role="menubar">
+                <a class="navbar-link" href="index.html" role="menuitem">HOME</a>
+                <a class="navbar-link active" href="questionbank.html" role="menuitem">BANK</a>
+                <a class="navbar-link" href="wiki.html" role="menuitem">WIKI</a>
+                <a class="navbar-link" href="analytics.html" role="menuitem">STATS</a>
+            <span id="site-health" class="health-badge" title="Site status">●</span></div>
+        </nav>
+
+        <div class="qb-layout">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div style="margin-bottom: 48px;">
+                    <label class="sidebar-label" for="search-input">SEARCH_DB</label>
+                    <input type="search" id="search-input" placeholder="TYPE_TO_FIND..." aria-label="Search questions">
+                </div>
+
+                <div id="topic-filters" role="group" aria-labelledby="categories-label" style="margin-bottom: 32px;">
+                    <label class="sidebar-label" id="categories-label">CATEGORIES</label>
+                    <!-- Populated by qb.js -->
+                </div>
+
+                <div id="difficulty-filters" role="group" aria-labelledby="difficulty-label">
+                    <label class="sidebar-label" id="difficulty-label">DIFFICULTY</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="difficulty-pills-container">
+                        <!-- Populated by qb.js -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MAIN -->
+            <main class="qb-main">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 48px; border-bottom: 3px solid var(--ink); padding-bottom: 16px;">
+                    <div id="status-bar" style="font-size: 13px; font-weight: 700; color: var(--grey);">STATUS: LOADING...</div>
+                    <button class="btn" id="practice-btn">INIT_PRACTICE ?</button>
+                </div>
+                <div id="questions-container" class="cards-container">
+                    <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed var(--grey); animation: qv-pulse 1.5s infinite;" data-flip-id="skel-1"></div>
+                    <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed var(--grey); animation: qv-pulse 1.5s infinite; animation-delay: 0.2s;" data-flip-id="skel-2"></div>
+                    <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed var(--grey); animation: qv-pulse 1.5s infinite; animation-delay: 0.4s;" data-flip-id="skel-3"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    
+<!-- DO NOT REMOVE: DATA LOADING -->
+    <script src="data/questions.js"></script>
+    <script src="js/error-boundary.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/sanitizer.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/youtube-embed.js"></script>
+    <script src="js/cloud-sync.js"></script>
+    <script src="js/sm2.js"></script>
+    <script src="js/components/quiz-card.js"></script>
+    <script src="js/qb.js"></script>
+    <script src="js/practice.js"></script>
+    
+    <script>
+    (function() {
+      var badge = document.getElementById('site-health');
+      if (!badge) return;
+      var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
+      if (qCount === 0) {
+        badge.classList.add('error');
+        badge.title = 'CRITICAL: questions.js failed to load (0 questions)';
+      } else if (qCount < 50) {
+        badge.classList.add('warning');
+        badge.title = qCount + ' questions loaded (low)';
+      } else {
+        badge.title = qCount + ' questions loaded — OK';
+      }
+    })();
+    </script>
+    <script src="js/onboarding.js"></script>
+    <!-- GSAP Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    <script src="js/animations.js"></script>
+
+<script src="js/command-palette.js"></script>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+}
+</script>
+</body></html>

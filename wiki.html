@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKI — QUIZVAULT</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- SEO -->
+    <meta name="description" content="Your personalized collection of quiz fundas.">
+    <meta name="keywords" content="quiz, general knowledge, GK, trivia, practice, question bank, study">
+    <meta name="author" content="QuizVault">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QuizVault — Study Wiki">
+    <meta property="og:description" content="Your personalized collection of quiz fundas.">
+    <meta property="og:image" content="images/og_card.png">
+    <meta property="og:url" content="https://quizvault.netlify.app/">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QuizVault — Study Wiki">
+    <meta name="twitter:description" content="Your personalized collection of quiz fundas.">
+    <meta name="twitter:image" content="images/og_card.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/favicon-192.png">
+</head>
+<body>
+    <div class="screen-container">
+        <!-- NAVBAR -->
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <a aria-label="QuizVault Home" class="navbar-logo" href="index.html" role="menuitem">
+                QUIZ<span>VAULT</span>
+            </a>
+            <div class="navbar-links" role="menubar">
+                <a class="navbar-link" href="index.html" role="menuitem">HOME</a>
+                <a class="navbar-link" href="questionbank.html" role="menuitem">BANK</a>
+                <a class="navbar-link active" href="wiki.html" role="menuitem">WIKI</a>
+                <a class="navbar-link" href="analytics.html" role="menuitem">STATS</a>
+            <span id="site-health" class="health-badge" title="Site status">●</span></div>
+        </nav>
+
+        <main class="qb-main" style="max-width: 900px; margin: 0 auto;">
+            <h1 class="page-title">SAVED_KNOWLEDGE_DOSSIER</h1>
+            
+            <div id="wiki-list" class="cards-container">
+                <!-- Populated by script -->
+            </div>
+        </main>
+    </div>
+
+    <!-- DO NOT REMOVE: DATA LOADING -->
+    <script src="data/questions.js"></script>
+    <script src="js/error-boundary.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/sanitizer.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/youtube-embed.js"></script>
+    <script src="js/cloud-sync.js"></script>
+    <script>
+        (function() {
+            const list = document.getElementById('wiki-list');
+            function renderWiki() {
+                const wiki = state.getWiki();
+                const ids = Object.keys(wiki);
+                if (ids.length === 0) {
+                    list.innerHTML = `<div class="question-card">NO_ENTRIES_FOUND.</div>`;
+                    return;
+                }
+                list.innerHTML = ids.map(id => {
+                    const entry = wiki[id];
+                    return `
+                        <div class="question-card">
+                            <div class="card-header">
+                                <span class="card-num">${entry.title}</span>
+                                <button class="btn" style="padding: 4px 8px; font-size: 10px; box-shadow: none;" onclick="removeEntry('${id}')">DEL</button>
+                            </div>
+                            <div class="answer-block">
+                                <strong>ANS:</strong>
+                                <div class="answer-text">${entry.answer}</div>
+                            </div>
+                            <div class="answer-block" style="border-top: 1px solid rgba(0,0,0,0.1);">
+                                <strong>FUNDA:</strong>
+                                <div class="answer-text">${entry.funda}</div>
+                            </div>
+                            <div style="margin-top: 16px; font-size: 11px; color: var(--grey); letter-spacing: 1px;">TOPIC: ${entry.topic.toUpperCase()} | DATE: ${new Date(entry.savedAt).toLocaleDateString()}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            window.removeEntry = (id) => {
+                if (confirm('ERASE_DATA?')) {
+                    state.removeFromWiki(id);
+                    renderWiki();
+                }
+            };
+            state.subscribe(renderWiki);
+            renderWiki();
+        })();
+    </script>
+    
+    <script>
+    (function() {
+      var badge = document.getElementById('site-health');
+      if (!badge) return;
+      var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
+      if (qCount === 0) {
+        badge.classList.add('error');
+        badge.title = 'CRITICAL: questions.js failed to load (0 questions)';
+      } else if (qCount < 50) {
+        badge.classList.add('warning');
+        badge.title = qCount + ' questions loaded (low)';
+      } else {
+        badge.title = qCount + ' questions loaded — OK';
+      }
+    })();
+    </script>
+    <script src="js/onboarding.js"></script>
+<script src="js/command-palette.js"></script>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+}
+</script>
+</body></html>

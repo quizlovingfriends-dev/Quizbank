@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STATS — QUIZVAULT</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- SEO -->
+    <meta name="description" content="Track your quiz mastery and accuracy.">
+    <meta name="keywords" content="quiz, general knowledge, GK, trivia, practice, question bank, study">
+    <meta name="author" content="QuizVault">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QuizVault — Performance Statistics">
+    <meta property="og:description" content="Track your quiz mastery and accuracy.">
+    <meta property="og:image" content="images/og_card.png">
+    <meta property="og:url" content="https://quizvault.netlify.app/">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QuizVault — Performance Statistics">
+    <meta name="twitter:description" content="Track your quiz mastery and accuracy.">
+    <meta name="twitter:image" content="images/og_card.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/favicon-192.png">
+</head>
+<body>
+    <div class="screen-container">
+        <!-- NAVBAR -->
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <a aria-label="QuizVault Home" class="navbar-logo" href="index.html" role="menuitem">
+                QUIZ<span>VAULT</span>
+            </a>
+            <div class="navbar-links" role="menubar">
+                <a class="navbar-link" href="index.html" role="menuitem">HOME</a>
+                <a class="navbar-link" href="questionbank.html" role="menuitem">BANK</a>
+                <a class="navbar-link" href="wiki.html" role="menuitem">WIKI</a>
+                <a class="navbar-link active" href="analytics.html" role="menuitem">STATS</a>
+            <span id="site-health" class="health-badge" title="Site status">●</span></div>
+        </nav>
+
+        <main class="qb-main">
+            <h1 class="page-title">PERFORMANCE_ANALYTICS</h1>
+
+            <!-- Headline Stats (Fix 4) -->
+            <div id="analytics-stat-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;">
+                <div style="border:3px solid var(--ink);padding:20px;">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--grey);margin-bottom:8px;">TOTAL_ATTEMPTED</div>
+                    <div id="stat-total" style="font-size:36px;font-weight:900;">—</div>
+                </div>
+                <div style="border:3px solid var(--ink);padding:20px;">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--grey);margin-bottom:8px;">OVERALL_ACCURACY</div>
+                    <div id="stat-accuracy" style="font-size:36px;font-weight:900;">—</div>
+                </div>
+                <div style="border:3px solid var(--ink);padding:20px;">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--grey);margin-bottom:8px;">CURRENT_STREAK</div>
+                    <div id="stat-streak" style="font-size:36px;font-weight:900;">—</div>
+                </div>
+                <div style="border:3px solid var(--ink);padding:20px;">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--grey);margin-bottom:8px;">SESSIONS</div>
+                    <div id="stat-sessions" style="font-size:36px;font-weight:900;">—</div>
+                </div>
+            </div>
+
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px;">
+                <div class="graph-container">
+                    <div style="font-size: 11px; font-weight: 700; margin-bottom: 16px;">TOPIC_MASTERY (%)</div>
+                    <div class="pixel-bar-chart" id="mastery-chart">
+                        <!-- Populated by script -->
+                    </div>
+                </div>
+                <div class="graph-container">
+                    <div style="font-size: 11px; font-weight: 700; margin-bottom: 16px;">ACCURACY_TREND (LAST 12 DAYS)</div>
+                    <div class="pixel-bar-chart" id="accuracy-chart">
+                        <!-- Populated by script -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="graph-container" style="margin-bottom: 32px;">
+                <div style="font-size: 11px; font-weight: 700; margin-bottom: 24px;">CUMULATIVE_PERFORMANCE_TREND</div>
+                <div id="cumulative-chart-container" style="height: 120px; border-bottom: 3px solid var(--ink); position: relative; margin-top: 20px;">
+                    <!-- Line chart generated by JS -->
+                </div>
+            </div>
+
+            <div class="graph-container" style="margin-bottom: 32px;">
+                <div style="font-size: 11px; font-weight: 700; margin-bottom: 24px;">DAILY_ACTIVITY_HEATMAP</div>
+                <div id="activity-grid" class="activity-grid">
+                    <!-- Populated by script -->
+                </div>
+            </div>
+
+            <div class="graph-container">
+                <div style="font-size: 11px; font-weight: 700; margin-bottom: 24px;">DATA_MANAGEMENT</div>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <button class="btn" onclick="window.QVApi.downloadBackup()">EXPORT_BACKUP 💾</button>
+                    <label class="btn" style="cursor: pointer;">
+                        IMPORT_BACKUP 📂
+                        <input type="file" id="import-file" style="display: none;" onchange="window.QVApi.uploadBackup(this.files[0])">
+                    </label>
+                    <button class="btn" style="background: var(--hot); color: var(--paper);" onclick="if(confirm('WIPE_ALL_DATA?')) { localStorage.clear(); location.reload(); }">WIPE_DATA ⚠</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- DO NOT REMOVE: DATA LOADING -->
+    <script src="data/questions.js"></script>
+    <script src="js/error-boundary.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/sanitizer.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/youtube-embed.js"></script>
+    <script src="js/cloud-sync.js"></script>
+        <script src="js/analytics.js"></script>
+    <script src="js/onboarding.js"></script>
+<script src="js/command-palette.js"></script>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+}
+</script>
+</body></html>
