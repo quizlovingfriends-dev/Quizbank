@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CONTROL_PANEL — QUIZVAULT</title>
+<style>
+  :root {
+    --paper: #f3f0e8;
+    --ink:   #0a0a0a;
+    --hot:   #df2c00;
+    --grey:  #888;
+    --good:  #0d8c3a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', ui-monospace, monospace;
+    background: var(--paper); color: var(--ink);
+    padding: 24px; line-height: 1.5;
+    background-image: linear-gradient(0deg, transparent 0, transparent 39px, rgba(0,0,0,0.04) 40px);
+    background-size: 40px 40px;
+    min-height: 100vh;
+  }
+  h1 { font-size: 36px; letter-spacing: -1px; margin-bottom: 4px; }
+  h2 { font-size: 14px; letter-spacing: 3px; margin: 32px 0 16px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .header { display: flex; justify-content: space-between; align-items: end; padding-bottom: 16px; border-bottom: 3px solid var(--ink); margin-bottom: 24px; }
+  .stamp { font-size: 11px; color: var(--grey); letter-spacing: 2px; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+  .tile { background: white; border: 3px solid var(--ink); padding: 16px; box-shadow: 4px 4px 0 var(--ink); }
+  .tile .label { font-size: 10px; letter-spacing: 2px; color: var(--grey); }
+  .tile .value { font-size: 32px; font-weight: 900; margin-top: 6px; color: var(--ink); }
+  .tile.alert .value { color: var(--hot); }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: white; border: 3px solid var(--ink); padding: 20px; box-shadow: 6px 6px 0 var(--ink); margin-bottom: 24px; }
+  .card h2 { margin-top: 0; }
+
+  .btn {
+    display: inline-block; background: var(--ink); color: var(--paper);
+    border: 3px solid var(--ink); padding: 10px 18px; cursor: pointer;
+    font-family: inherit; font-size: 12px; font-weight: 900; letter-spacing: 2px;
+    box-shadow: 4px 4px 0 var(--hot); transition: transform 0.06s, box-shadow 0.06s;
+  }
+  .btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--hot); }
+  .btn:disabled { opacity: 0.4; cursor: wait; }
+  .btn.green { background: var(--good); box-shadow: 4px 4px 0 var(--ink); }
+  .btn.red   { background: var(--hot); box-shadow: 4px 4px 0 var(--ink); }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: none; border-color: var(--ink); }
+
+  input[type=text], input[type=number], select, textarea {
+    width: 100%; background: white; color: var(--ink); border: 2px solid var(--ink);
+    padding: 8px 10px; font-family: inherit; font-size: 13px; margin-top: 4px;
+  }
+  textarea { min-height: 60px; resize: vertical; }
+  .field { margin-bottom: 12px; }
+  .field label { font-size: 10px; letter-spacing: 2px; color: var(--grey); }
+
+  #dropzone {
+    border: 3px dashed var(--ink); padding: 32px; text-align: center;
+    background: rgba(0,0,0,0.02); transition: background 0.15s;
+    cursor: pointer;
+  }
+  #dropzone.over { background: rgba(223,44,0,0.08); }
+  #dropzone .hint { font-size: 11px; color: var(--grey); margin-top: 8px; letter-spacing: 1px; }
+
+  .pending-list { display: flex; flex-direction: column; gap: 12px; max-height: 600px; overflow-y: auto; padding-right: 6px; }
+  .pending-item { border: 2px solid var(--ink); padding: 12px; background: rgba(0,0,0,0.02); }
+  .pending-item.acted { opacity: 0.4; pointer-events: none; }
+  .pending-item .meta { display: flex; gap: 10px; font-size: 10px; letter-spacing: 1px; margin-bottom: 8px; }
+  .pending-item .pill { background: var(--hot); color: var(--paper); padding: 2px 8px; font-weight: 900; }
+  .pending-item .topic-pill { background: var(--ink); color: var(--paper); padding: 2px 8px; }
+  .pending-item .issues { font-size: 11px; color: var(--hot); margin: 6px 0 10px; }
+  .pending-item textarea { min-height: 50px; font-size: 12px; }
+  .pending-item .actions { display: flex; gap: 8px; margin-top: 10px; }
+  .pending-item .actions .btn { padding: 6px 12px; font-size: 10px; box-shadow: 2px 2px 0 var(--ink); }
+
+  .jobs { display: flex; flex-direction: column; gap: 6px; }
+  .job { border-left: 4px solid var(--grey); padding: 6px 10px; font-size: 12px; background: rgba(0,0,0,0.02); }
+  .job.running  { border-color: #b8860b; }
+  .job.done     { border-color: var(--good); }
+  .job.error    { border-color: var(--hot); }
+  .job .msg     { font-size: 11px; color: var(--grey); margin-top: 2px; }
+
+  .empty { text-align: center; padding: 40px 20px; color: var(--grey); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div>
+      <h1>QUIZVAULT // CONTROL_PANEL</h1>
+      <div class="stamp">Local dashboard — runs on your machine only.</div>
+    </div>
+    <button class="btn ghost" onclick="refresh()">⟳ REFRESH</button>
+  </div>
+
+  <!-- TOP STATS -->
+  <div class="grid">
+    <div class="tile"><div class="label">QUESTIONS_LIVE</div><div class="value" id="stat-q">—</div></div>
+    <div class="tile" id="tile-pending"><div class="label">PENDING_REVIEW</div><div class="value" id="stat-pending">—</div></div>
+    <div class="tile"><div class="label">LAST_COMMIT</div><div class="value" id="stat-commit" style="font-size:14px;line-height:1.3;margin-top:14px;">—</div></div>
+    <div class="tile"><div class="label">JOBS_RUNNING</div><div class="value" id="stat-jobs">0</div></div>
+  </div>
+
+  <!-- TOP ACTIONS -->
+  <div class="row">
+
+    <!-- DROP ZONE -->
+    <div class="card">
+      <h2>① ADD_QUIZ_FILE</h2>
+      <div id="dropzone">
+        <div style="font-size:32px;line-height:1;">📥</div>
+        <div style="margin-top:12px;font-weight:900;letter-spacing:2px;">DROP_PDF_OR_PPTX_HERE</div>
+        <div class="hint">or click to choose a file</div>
+        <input id="file-input" type="file" accept=".pdf,.pptx,.odp,.odt" style="display:none">
+      </div>
+    </div>
+
+    <!-- AI GENERATOR -->
+    <div class="card">
+      <h2>② GENERATE_AI_QUESTIONS</h2>
+      <div class="field">
+        <label>TOPIC</label>
+        <input type="text" id="gen-topic" placeholder="e.g. ancient indian dynasties">
+      </div>
+      <div class="row" style="gap:10px;">
+        <div class="field">
+          <label>COUNT</label>
+          <input type="number" id="gen-count" value="10" min="1" max="100">
+        </div>
+        <div class="field">
+          <label>DIFFICULTY</label>
+          <select id="gen-difficulty">
+            <option>easy</option>
+            <option selected>medium</option>
+            <option>hard</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn red" onclick="generateAI()">⚡ GENERATE</button>
+      <div style="font-size:10px;color:var(--grey);margin-top:8px;letter-spacing:1px;">
+        AI questions route to PENDING_REVIEW — always spot-check before publishing.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PENDING REVIEW QUEUE -->
+  <div class="card">
+    <h2>③ PENDING_REVIEW_QUEUE</h2>
+    <div id="pending-container">
+      <div class="empty">Loading…</div>
+    </div>
+  </div>
+
+  <!-- PUBLISH -->
+  <div class="card" style="text-align:center;background:rgba(13,140,58,0.05);">
+    <h2 style="margin-bottom:8px;">④ PUBLISH_TO_LIVE_SITE</h2>
+    <p style="font-size:12px;color:var(--grey);margin-bottom:16px;letter-spacing:1px;">
+      Pushes everything to git → Netlify auto-rebuilds → live in ~60s
+    </p>
+    <button class="btn green" style="font-size:16px;padding:14px 32px;" onclick="publish()">
+      🚀 PUBLISH_NOW
+    </button>
+  </div>
+
+  <!-- JOB LOG -->
+  <div class="card">
+    <h2>⑤ ACTIVITY_LOG</h2>
+    <div id="jobs-list" class="jobs">
+      <div class="empty">No jobs yet.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────
+const state = {
+  pending: [],
+  decisions: {},  // idx → { decision, edits }
+};
+
+// ── API helpers ──────────────────────────────────────────────────────────
+async function api(path, body) {
+  const opts = body ? { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) } : {};
+  const r = await fetch(path, opts);
+  return r.json();
+}
+
+// ── Refresh ──────────────────────────────────────────────────────────────
+async function refresh() {
+  try {
+    const s = await api('/api/status');
+    document.getElementById('stat-q').textContent = s.questions || 0;
+    document.getElementById('stat-pending').textContent = s.pending || 0;
+    document.getElementById('stat-commit').textContent = s.last_commit || '—';
+    const running = (s.jobs || []).filter(j => j.status === 'running').length;
+    document.getElementById('stat-jobs').textContent = running;
+    document.getElementById('tile-pending').classList.toggle('alert', (s.pending || 0) > 0);
+    renderJobs(s.jobs || []);
+    await loadPending();
+  } catch (e) {
+    console.error('Refresh failed:', e);
+  }
+}
+
+function renderJobs(jobs) {
+  const wrap = document.getElementById('jobs-list');
+  if (jobs.length === 0) { wrap.innerHTML = '<div class="empty">No jobs yet.</div>'; return; }
+  wrap.innerHTML = jobs.slice().reverse().map(j => {
+    const when = new Date(j.started_at * 1000).toLocaleTimeString();
+    return `<div class="job ${j.status}">
+      <div><b>${j.kind.toUpperCase()}</b> · ${j.status.toUpperCase()} · ${when}</div>
+      <div class="msg">${escapeHTML(j.message || '')}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── PENDING queue ────────────────────────────────────────────────────────
+async function loadPending() {
+  const data = await api('/api/pending');
+  state.pending = data.items || [];
+  renderPending();
+}
+
+function renderPending() {
+  const wrap = document.getElementById('pending-container');
+  if (state.pending.length === 0) {
+    wrap.innerHTML = '<div class="empty">✓ Queue clear. No questions awaiting review.</div>';
+    return;
+  }
+  wrap.innerHTML = '<div class="pending-list">' + state.pending.map((it, idx) => {
+    const q = it.question || {};
+    const g = it.gate || {};
+    const qt = q.question_text || (q.question && q.question.text) || '';
+    const at = q.answer_text || (q.answer && q.answer.text) || '';
+    const ft = q.funda_text || (q.funda && q.funda.text) || '';
+    const topic = q.topic || 'general';
+    return `<div class="pending-item" data-idx="${idx}">
+      <div class="meta">
+        <span class="pill">SCORE: ${g.score || 0}</span>
+        <span class="topic-pill">${topic.toUpperCase()}</span>
+        <span style="color:var(--grey);">${it.source || 'unknown'}</span>
+      </div>
+      <div class="issues">⚠ ${(g.issues || []).join(' · ') || 'No issues'}</div>
+      <label style="font-size:10px;letter-spacing:2px;color:var(--grey);">QUESTION</label>
+      <textarea data-field="question_text">${escapeHTML(qt)}</textarea>
+      <label style="font-size:10px;letter-spacing:2px;color:var(--grey);margin-top:8px;">ANSWER</label>
+      <textarea data-field="answer_text">${escapeHTML(at)}</textarea>
+      <label style="font-size:10px;letter-spacing:2px;color:var(--grey);margin-top:8px;">FUNDA</label>
+      <textarea data-field="funda_text">${escapeHTML(ft)}</textarea>
+      <div class="actions">
+        <button class="btn ghost" onclick="actOn(${idx}, 'reject')">DISCARD</button>
+        <button class="btn green" style="margin-left:auto;" onclick="actOn(${idx}, 'approve')">APPROVE →</button>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function actOn(idx, decision) {
+  const card = document.querySelector(`.pending-item[data-idx="${idx}"]`);
+  if (!card) return;
+  const edits = {};
+  card.querySelectorAll('[data-field]').forEach(el => edits[el.dataset.field] = el.value);
+  state.decisions[idx] = { decision, edits };
+  card.classList.add('acted');
+  // Auto-submit when all visible items have a decision OR debounce-submit after 2s of inactivity
+  scheduleApply();
+}
+
+let applyTimer = null;
+function scheduleApply() {
+  clearTimeout(applyTimer);
+  applyTimer = setTimeout(applyDecisions, 1500);
+}
+
+async function applyDecisions() {
+  if (Object.keys(state.decisions).length === 0) return;
+  const r = await api('/api/apply', { decisions: state.decisions });
+  state.decisions = {};
+  if (r.ok) {
+    flash(`✓ Approved ${r.approved} · Rejected ${r.rejected} · Added ${r.added} to live`, 'good');
+  } else {
+    flash('✗ ' + (r.error || 'Failed'), 'bad');
+  }
+  await refresh();
+}
+
+// ── DROP ZONE ────────────────────────────────────────────────────────────
+const dz = document.getElementById('dropzone');
+const fi = document.getElementById('file-input');
+dz.addEventListener('click', () => fi.click());
+fi.addEventListener('change', e => { if (e.target.files[0]) uploadFile(e.target.files[0]); });
+['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('over'); }));
+dz.addEventListener('drop', e => {
+  const f = e.dataTransfer.files[0]; if (f) uploadFile(f);
+});
+
+async function uploadFile(file) {
+  flash('Uploading ' + file.name + '...', 'good');
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const b64 = reader.result.split(',')[1];
+    const r = await api('/api/upload', { filename: file.name, data: b64 });
+    if (r.ok) {
+      flash('✓ Uploaded. Extraction in progress. Check Activity Log.', 'good');
+    } else {
+      flash('✗ Upload failed: ' + r.error, 'bad');
+    }
+    setTimeout(refresh, 1000);
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── AI GENERATE ──────────────────────────────────────────────────────────
+async function generateAI() {
+  const topic = document.getElementById('gen-topic').value.trim();
+  if (!topic) { flash('Enter a topic first.', 'bad'); return; }
+  const count = parseInt(document.getElementById('gen-count').value) || 10;
+  const diff = document.getElementById('gen-difficulty').value;
+  flash('Generating ' + count + ' questions on "' + topic + '"...', 'good');
+  const r = await api('/api/generate', { topic, count, difficulty: diff });
+  if (r.ok) flash('✓ Generation started. Check Activity Log (~1 min).', 'good');
+  else      flash('✗ ' + r.error, 'bad');
+  setTimeout(refresh, 1500);
+}
+
+// ── PUBLISH ──────────────────────────────────────────────────────────────
+async function publish() {
+  if (!confirm('Publish current state to live site?')) return;
+  const r = await api('/api/publish');
+  if (r.ok) flash('✓ Pushed. Site rebuilds in ~60s.', 'good');
+  else      flash('✗ ' + (r.error || 'Failed'), 'bad');
+  setTimeout(refresh, 2000);
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => (
+    { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]
+  ));
+}
+
+function flash(msg, kind) {
+  const el = document.createElement('div');
+  el.textContent = msg;
+  el.style.cssText = `
+    position:fixed;bottom:24px;right:24px;z-index:9999;
+    background:${kind==='bad'?'var(--hot)':'var(--ink)'};color:var(--paper);
+    padding:12px 20px;border:3px solid var(--ink);box-shadow:6px 6px 0 ${kind==='bad'?'var(--ink)':'var(--hot)'};
+    font-weight:900;letter-spacing:1px;max-width:400px;
+  `;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────────
+refresh();
+setInterval(refresh, 5000);  // auto-refresh every 5s
+</script>
+
+</body>
+</html>
