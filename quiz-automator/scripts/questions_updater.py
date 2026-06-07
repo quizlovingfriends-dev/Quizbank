@@ -98,7 +98,10 @@ def validate_js(js_text):
 
 # ── New-question validation & duplicate detection ────────────────────────────
 
-ALLOWED_TOPICS = {"sports", "wildlife", "current-affairs", "history", "politics", "cuisines", "general"}
+ALLOWED_TOPICS = {
+    "sports", "wildlife", "current-affairs", "history", "politics",
+    "cuisines", "science", "literature", "geography", "general",
+}
 
 def validate_question(q):
     """
@@ -258,6 +261,17 @@ def main():
 
     source_meta = {"loaded_from": sys.argv[1] if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]) else "stdin"}
 
+    # Auto-detect source from the loaded file's metadata or filename.
+    # Generated AI files start with "generated_" — treat as "ai".
+    # Everything else (extractor output) is "watcher".
+    source_label = "watcher"
+    loaded_path = source_meta.get("loaded_from", "")
+    if loaded_path and "generated_" in os.path.basename(loaded_path):
+        source_label = "ai"
+    # Allow the extracted payload to override
+    if isinstance(extracted, dict):
+        source_label = extracted.get("source") or source_label
+
     for q in new_questions:
         ok, reason = validate_question(q)
         if not ok:
@@ -267,15 +281,15 @@ def main():
             rejected.append((q.get("question_text", "")[:60], "duplicate of existing"))
             continue
 
-        # Quality gate — score & route
+        # Quality gate — score & route. Source-aware: AI/community always pending.
         if gate_available:
-            gate = classify_question(q)
+            gate = classify_question(q, source=source_label)
             if gate["verdict"] == "rejected":
                 rejected.append((q.get("question_text", "")[:60],
                                  f"gate rejected (score={gate['score']}): {gate['issues'][:2]}"))
                 continue
             if gate["verdict"] == "pending":
-                add_to_queue(q, gate, source="watcher", source_meta=source_meta)
+                add_to_queue(q, gate, source=source_label, source_meta=source_meta)
                 pending.append((q.get("question_text", "")[:60], gate["score"]))
                 continue
 

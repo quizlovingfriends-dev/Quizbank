@@ -169,12 +169,24 @@ def score_question(q, images_dir=None):
 
 # ── Verdict (single decision point) ────────────────────────────────────────
 
-def classify_question(q, images_dir=None):
-    """Top-level helper used by every other script."""
+def classify_question(q, images_dir=None, source=None):
+    """Top-level helper used by every other script.
+
+    `source` controls the trust level. AI-generated and community-submitted
+    questions ALWAYS go to pending review, even with a perfect score —
+    because they need human eyeballs on factual accuracy.
+    Only "watcher" (i.e. extracted from your curated PPTX/PDF) can auto-approve.
+    """
     score, issues, auto_fixes = score_question(q, images_dir)
+
+    UNTRUSTED_SOURCES = {"ai", "community", "manual"}
 
     if score < SCORE_AUTO_REJECT:
         verdict = "rejected"
+    elif source in UNTRUSTED_SOURCES:
+        # Force human review on anything not from your trusted source
+        verdict = "pending"
+        issues.append(f"Source '{source}' — always goes to review (not auto-approve)")
     elif score >= SCORE_AUTO_APPROVE:
         verdict = "approved"
     else:
@@ -185,6 +197,7 @@ def classify_question(q, images_dir=None):
         "verdict":    verdict,
         "issues":     issues,
         "auto_fixes": auto_fixes,
+        "source":     source or "unknown",
     }
 
 
