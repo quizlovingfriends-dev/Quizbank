@@ -1,74 +1,238 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUIZVAULT — Knowledge Terminal</title>
+    <title>QUIZVAULT — Memorize Lists, Not Facts</title>
+
+    <!-- Existing app stylesheet (kept for compatibility with overlays, modals, etc.) -->
     <link rel="stylesheet" href="css/styles.css">
 
+    <!-- Stitch / Brutalist design tokens -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#ba0034",
+                        "surface": "#fdf8f8",
+                        "surface-container": "#f1edec",
+                        "surface-container-low": "#f7f3f2",
+                        "surface-container-high": "#ebe7e6",
+                        "surface-variant": "#e5e2e1",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#444748",
+                        "primary": "#000000",
+                        "primary-container": "#1c1b1b",
+                        "outline": "#747878",
+                        "background": "#fdf8f8",
+                        "on-background": "#1c1b1b",
+                        "secondary-container": "#e80243",
+                        "tertiary-fixed-dim": "#bcc2ff",
+                        "on-tertiary-fixed-variant": "#0024d9"
+                    },
+                    borderRadius: { DEFAULT: "0px", lg: "0px", xl: "0px", full: "0px" },
+                    spacing: { margin: "32px", "border-weight": "3px", "rule-weight": "2px", gutter: "24px", "base-unit": "4px" },
+                    fontFamily: {
+                        "section-label": ["JetBrains Mono"],
+                        "body-md": ["JetBrains Mono"],
+                        "hero-display": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "ui-button": ["JetBrains Mono"]
+                    },
+                    fontSize: {
+                        "section-label":     ["11px", { lineHeight: "16px", letterSpacing: "4px", fontWeight: "700" }],
+                        "body-md":           ["14px", { lineHeight: "1.5", letterSpacing: "0px", fontWeight: "400" }],
+                        "ui-button":         ["16px", { lineHeight: "1", letterSpacing: "1px", fontWeight: "700" }],
+                        "headline-lg-mobile":["32px", { lineHeight: "1.1", letterSpacing: "-1px", fontWeight: "900" }],
+                        "headline-lg":       ["48px", { lineHeight: "1.1", letterSpacing: "-2px", fontWeight: "900" }],
+                        "hero-display":      ["96px", { lineHeight: "1.0", letterSpacing: "-4px", fontWeight: "900" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #fdf8f8; font-family: "JetBrains Mono", monospace; }
+        .hard-shadow { box-shadow: 6px 6px 0 0 #000; transition: all .2s ease; }
+        .hard-shadow:hover { transform: translate(-4px,-4px); box-shadow: 10px 10px 0 0 #000; }
+        .hard-shadow:active { transform: translate(6px,6px); box-shadow: none; }
+        .hero-text { font-size: clamp(64px, 10vw, 140px); letter-spacing: -4px; line-height: .9; }
+        .grid-item-hover:hover { background-color: #1e3afa; color: #fdf8f8; }
+        .grid-item-hover:hover .material-symbols-outlined,
+        .grid-item-hover:hover .tile-label,
+        .grid-item-hover:hover .tile-count { color: #fdf8f8 !important; }
+        /* Site-health badge styling preserved */
+        .health-badge { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #00c853; margin-left: 12px; vertical-align: middle; }
+        .health-badge.warning { background: #ffb300; }
+        .health-badge.error   { background: #ba1a1a; }
+    </style>
+
     <!-- SEO -->
-    <meta name="description" content="A curated GK question bank with smart practice mode.">
+    <meta name="description" content="A curated GK question bank built for retrieval. Memorize lists, not facts.">
     <meta name="keywords" content="quiz, general knowledge, GK, trivia, practice, question bank, study">
     <meta name="author" content="QuizVault">
     <meta name="theme-color" content="#0a0a0a">
 
     <!-- OpenGraph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="QuizVault — GK Question Bank">
-    <meta property="og:description" content="A curated GK question bank with smart practice mode.">
+    <meta property="og:title" content="QuizVault — Memorize Lists, Not Facts">
+    <meta property="og:description" content="200 curated questions. 10 topics. Built for retrieval.">
     <meta property="og:image" content="images/og_card.png">
     <meta property="og:url" content="https://quizvault.netlify.app/">
 
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="QuizVault — GK Question Bank">
-    <meta name="twitter:description" content="A curated GK question bank with smart practice mode.">
+    <meta name="twitter:title" content="QuizVault — Memorize Lists, Not Facts">
+    <meta name="twitter:description" content="200 curated questions. 10 topics. Built for retrieval.">
     <meta name="twitter:image" content="images/og_card.png">
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/favicon.png">
-
-<link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="images/favicon-192.png">
 </head>
-<body>
-    <div class="screen-container">
-        <!-- NAVBAR -->
-        <nav class="navbar" role="navigation" aria-label="Main navigation">
-            <a aria-label="QuizVault Home" class="navbar-logo" href="index.html" role="menuitem">
-                QUIZ<span>VAULT</span>
-            </a>
-            <div class="navbar-links" role="menubar">
-                <a class="navbar-link active" href="index.html" role="menuitem" aria-current="page">HOME</a>
-                <a class="navbar-link" href="questionbank.html" role="menuitem">BANK</a>
-                <a class="navbar-link" href="wiki.html" role="menuitem">WIKI</a>
-                <a class="navbar-link" href="analytics.html" role="menuitem">STATS</a>
-            <span id="site-health" class="health-badge" title="Site status">●</span></div>
-        </nav>
+<body class="text-primary font-body-md overflow-x-hidden min-h-screen flex flex-col">
 
-        <main class="landing-hero">
-            <div class="title-wrapper">
-                <div class="eyebrow" aria-hidden="true">QUIZ MACHINE / V2.0</div>
-                <h1 class="title-bottom" id="main-heading">BUILT FOR<br>THE OBSESSED.</h1>
-                
-            </div>
-
-            <div style="display: flex; gap: 16px;">
-                <button class="btn" id="hero-practice-btn" aria-haspopup="dialog">START_PRACTICE ?</button>
-                <a href="questionbank.html" role="menuitem" class="btn btn-ghost" style="text-decoration: none;" aria-label="Browse Question Database">BROWSE_DB ?</a>
-            </div>
-        
-            <div id="last-updated-stamp" style="font-size: 11px; color: var(--grey); margin-top: 24px; letter-spacing: 1px;">
-              LAST_DATABASE_SYNC: <span id="last-sync-time">—</span>
-            </div>
-        </main>
-
-        <!-- STATS BAR -->
-        <div class="stats-bar" id="stats-bar">
-            <!-- Populated by home.js -->
+    <!-- NAVBAR (Stitch brutalist, IDs preserved) -->
+    <nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4" role="navigation" aria-label="Main navigation">
+        <a class="navbar-logo font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html" aria-label="QuizVault Home">
+            QUIZVAULT
+        </a>
+        <div class="navbar-links hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase" role="menubar">
+            <a class="navbar-link active text-secondary font-bold border-b-2 border-secondary pb-1" href="index.html" role="menuitem" aria-current="page">HOME</a>
+            <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="questionbank.html" role="menuitem">BANK</a>
+            <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="how-to-use.html" role="menuitem">HOW-TO</a>
+            <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="wiki.html" role="menuitem">WIKI</a>
+            <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="analytics.html" role="menuitem">STATS</a>
+            <span id="site-health" class="health-badge" title="Site status">●</span>
         </div>
-    </div>
+        <button id="hero-practice-btn" class="hidden md:flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow" aria-haspopup="dialog">
+            START_PRACTICE →
+        </button>
+    </nav>
 
-    
-<!-- DO NOT REMOVE: DATA LOADING -->
+    <!-- MAIN -->
+    <main class="flex-grow flex flex-col items-stretch pt-16 pb-16 px-margin max-w-7xl mx-auto w-full">
+
+        <!-- HERO -->
+        <section class="landing-hero w-full mb-24 text-left border-l-2 border-black pl-gutter">
+            <div class="eyebrow font-section-label text-section-label uppercase text-on-surface-variant mb-4" aria-hidden="true">SYSTEM PROTOCOL // V2.0</div>
+            <h1 id="main-heading" class="title-bottom font-hero-display font-black text-primary uppercase hero-text mb-8 max-w-5xl">
+                MEMORIZE LISTS,<br>NOT FACTS.
+            </h1>
+            <p class="font-body-md text-body-md uppercase tracking-widest text-primary mb-12 max-w-2xl border-b-2 border-black pb-4">
+                <span id="hero-q-count">200</span> CURATED QUESTIONS // <span id="hero-topic-count">10</span> TOPICS // BUILT FOR RETRIEVAL
+            </p>
+            <div class="flex gap-4 flex-wrap">
+                <a href="questionbank.html" class="bg-secondary text-on-secondary px-8 py-6 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow inline-flex items-center gap-4 text-xl" aria-label="Enter the question bank">
+                    ENTER THE VAULT →
+                </a>
+                <a href="how-to-use.html" class="bg-transparent text-primary px-8 py-6 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow inline-flex items-center gap-4 text-xl">
+                    READ THE PROTOCOL
+                </a>
+            </div>
+            <div id="last-updated-stamp" class="mt-8" style="font-size: 11px; color: #747878; letter-spacing: 1px;">
+                LAST_DATABASE_SYNC: <span id="last-sync-time">—</span>
+            </div>
+        </section>
+
+        <!-- STATS STRIP -->
+        <section id="stats-bar" class="stats-bar w-full border-t-[6px] border-b-[6px] border-black py-8 mb-24 flex flex-wrap justify-between items-center bg-surface">
+            <div class="flex flex-col items-center px-8 w-1/2 md:w-1/4 mb-8 md:mb-0">
+                <span id="stat-questions" class="font-hero-display text-[48px] md:text-[96px] font-black leading-none">200</span>
+                <span class="font-section-label text-section-label uppercase mt-2">QUESTIONS</span>
+            </div>
+            <div class="flex flex-col items-center px-8 w-1/2 md:w-1/4 md:border-l-2 border-black mb-8 md:mb-0">
+                <span id="stat-topics" class="font-hero-display text-[48px] md:text-[96px] font-black leading-none">10</span>
+                <span class="font-section-label text-section-label uppercase mt-2">TOPICS</span>
+            </div>
+            <div class="flex flex-col items-center px-8 w-1/2 md:w-1/4 md:border-l-2 border-black">
+                <span id="stat-streak" class="font-hero-display text-[48px] md:text-[96px] font-black leading-none">0</span>
+                <span class="font-section-label text-section-label uppercase mt-2">DAY STREAK</span>
+            </div>
+            <div class="flex flex-col items-center px-8 w-1/2 md:w-1/4 md:border-l-2 border-black">
+                <span id="stat-accuracy" class="font-hero-display text-[48px] md:text-[96px] font-black leading-none text-secondary">—</span>
+                <span class="font-section-label text-section-label uppercase mt-2">ACCURACY</span>
+            </div>
+        </section>
+
+        <!-- TOPIC GRID -->
+        <section class="w-full mb-24">
+            <h2 class="font-headline-lg text-headline-lg font-black uppercase mb-8 border-b-2 border-black pb-4">VAULT TOPICS</h2>
+            <div id="topic-grid" class="grid grid-cols-2 md:grid-cols-5 gap-gutter">
+                <!-- Tiles injected by home.js if needed; static fallbacks below -->
+                <a href="questionbank.html?topic=history" data-topic="history" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">HISTORY</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">account_balance</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="history">—</span>
+                </a>
+                <a href="questionbank.html?topic=science" data-topic="science" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">SCIENCE</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">science</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="science">—</span>
+                </a>
+                <a href="questionbank.html?topic=geography" data-topic="geography" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">GEOGRAPHY</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">public</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="geography">—</span>
+                </a>
+                <a href="questionbank.html?topic=politics" data-topic="politics" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">POLITICS</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">gavel</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="politics">—</span>
+                </a>
+                <a href="questionbank.html?topic=literature" data-topic="literature" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">LIT</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">menu_book</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="literature">—</span>
+                </a>
+                <a href="questionbank.html?topic=current-affairs" data-topic="current-affairs" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">CURRENT</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">newspaper</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="current-affairs">—</span>
+                </a>
+                <a href="questionbank.html?topic=cuisines" data-topic="cuisines" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">CUISINES</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">restaurant</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="cuisines">—</span>
+                </a>
+                <a href="questionbank.html?topic=sports" data-topic="sports" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">SPORTS</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">sports_soccer</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="sports">—</span>
+                </a>
+                <a href="questionbank.html?topic=wildlife" data-topic="wildlife" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">WILDLIFE</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">pets</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="wildlife">—</span>
+                </a>
+                <a href="questionbank.html?topic=general" data-topic="general" class="aspect-square border-[3px] border-black bg-surface p-4 flex flex-col justify-between relative hard-shadow grid-item-hover cursor-pointer no-underline">
+                    <span class="tile-label font-section-label text-section-label uppercase absolute top-4 left-4 z-10 text-primary">GENERAL</span>
+                    <div class="flex-grow flex items-center justify-center"><span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings:'FILL' 1;">casino</span></div>
+                    <span class="tile-count font-body-md text-body-md absolute bottom-4 right-4 z-10 text-primary" data-count-topic="general">—</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4">
+        <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+        <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
+            <a class="hover:text-secondary" href="how-to-use.html">HOW-TO</a>
+            <a class="hover:text-secondary" href="analytics.html">STATS</a>
+            <a class="hover:text-secondary" href="wiki.html">WIKI</a>
+        </div>
+    </footer>
+
+    <!-- DO NOT REMOVE: DATA LOADING -->
     <script src="data/questions.js"></script>
     <script src="js/error-boundary.js"></script>
     <script src="js/store.js"></script>
@@ -80,24 +244,65 @@
     <script src="js/sm2.js"></script>
     <script src="js/home.js"></script>
     <script src="js/practice.js"></script>
-    
+
+    <!-- Live stats + tile counts + health badge -->
     <script>
     (function() {
-      var badge = document.getElementById('site-health');
-      if (!badge) return;
-      var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
-      if (qCount === 0) {
-        badge.classList.add('error');
-        badge.title = 'CRITICAL: questions.js failed to load (0 questions)';
-      } else if (qCount < 50) {
-        badge.classList.add('warning');
-        badge.title = qCount + ' questions loaded (low)';
-      } else {
-        badge.title = qCount + ' questions loaded — OK';
-      }
+        var qs = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS : [];
+
+        // Health badge
+        var badge = document.getElementById('site-health');
+        if (badge) {
+            if (qs.length === 0)        { badge.classList.add('error');   badge.title = 'CRITICAL: questions.js failed to load (0 questions)'; }
+            else if (qs.length < 50)    { badge.classList.add('warning'); badge.title = qs.length + ' questions loaded (low)'; }
+            else                        { badge.title = qs.length + ' questions loaded — OK'; }
+        }
+
+        // Live counts
+        function setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+        setText('hero-q-count',     qs.length || 200);
+        setText('stat-questions',   qs.length || 200);
+
+        var topicSet = {};
+        qs.forEach(function(q){ if (q && q.topic) topicSet[q.topic] = (topicSet[q.topic]||0) + 1; });
+        var topicCount = Object.keys(topicSet).length || 10;
+        setText('hero-topic-count', topicCount);
+        setText('stat-topics',      topicCount);
+
+        // Per-tile counts
+        document.querySelectorAll('[data-count-topic]').forEach(function(el){
+            var t = el.getAttribute('data-count-topic');
+            el.textContent = (topicSet[t] || 0) + ' Qs';
+        });
+
+        // Streak + accuracy from localStorage (graceful fallback)
+        try {
+            var sm = JSON.parse(localStorage.getItem('qv_sm2_state') || '{}');
+            var correct = 0, total = 0;
+            Object.keys(sm).forEach(function(k){
+                var card = sm[k];
+                if (card && typeof card.correct === 'number' && typeof card.attempts === 'number') {
+                    correct += card.correct; total += card.attempts;
+                }
+            });
+            if (total > 0) setText('stat-accuracy', Math.round((correct/total)*100) + '%');
+            var streak = parseInt(localStorage.getItem('qv_day_streak') || '0', 10);
+            setText('stat-streak', streak || 0);
+        } catch (e) { /* ignore */ }
+
+        // Last-sync stamp
+        var stamp = document.getElementById('last-sync-time');
+        if (stamp) {
+            try {
+                var d = new Date(document.lastModified);
+                stamp.textContent = d.toISOString().slice(0,10);
+            } catch(e) { stamp.textContent = '2026-06-07'; }
+        }
     })();
     </script>
+
     <script src="js/onboarding.js"></script>
+
     <!-- GSAP Animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -105,10 +310,10 @@
 
     <script src="js/command-palette.js"></script>
 
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
-}
-</script>
-</body></html>
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js'); });
+    }
+    </script>
+</body>
+</html>
