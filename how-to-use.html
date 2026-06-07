@@ -1,196 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HOW_TO_USE — QUIZVAULT</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <meta name="description" content="The QuizVault method: quizzing is list-based memorization. Here's how to actually use this site to get good.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZVAULT — The Mechanics of Memory</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+        colors: {
+            "secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec",
+            "surface-container-low":"#f7f3f2","surface-variant":"#e5e2e1",
+            "on-secondary":"#fff","on-primary":"#fff","on-surface-variant":"#444748",
+            "primary":"#000","background":"#fdf8f8","secondary-container":"#e80243",
+            "on-tertiary-fixed-variant":"#0024d9"
+        },
+        borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
+        spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
+        fontFamily:{
+            "section-label":["JetBrains Mono"],"body-md":["JetBrains Mono"],
+            "hero-display":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],
+            "ui-button":["JetBrains Mono"]
+        },
+        fontSize:{
+            "section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],
+            "body-md":["14px",{lineHeight:"1.6",letterSpacing:"0",fontWeight:"400"}],
+            "ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],
+            "headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],
+            "headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],
+            "hero-display":["96px",{lineHeight:"1.0",letterSpacing:"-4px",fontWeight:"900"}]
+        }
+    }}
+}
+</script>
+<style>
+body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
+.hard-shadow { box-shadow:6px 6px 0 0 #000; transition:all .2s ease; }
+.hard-shadow:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000; }
+.health-badge { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00c853; margin-left:12px; vertical-align:middle; }
+.health-badge.warning { background:#ffb300; } .health-badge.error { background:#ba1a1a; }
+.saffron-row:hover { background:#1e3afa; color:#fdf8f8; }
+</style>
+
+<meta name="description" content="QuizVault Protocol: why quizzing is list memorization, not isolated facts.">
+<link rel="icon" type="image/png" href="images/favicon.png">
 </head>
-<body>
-    <div class="screen-container">
-        <!-- NAVBAR -->
-        <nav class="navbar" role="navigation" aria-label="Main navigation">
-            <a aria-label="QuizVault Home" class="navbar-logo" href="index.html" role="menuitem">
-                QUIZ<span>VAULT</span>
-            </a>
-            <div class="navbar-links" role="menubar">
-                <a class="navbar-link" href="index.html" role="menuitem">HOME</a>
-                <a class="navbar-link" href="questionbank.html" role="menuitem">BANK</a>
-                <a class="navbar-link" href="wiki.html" role="menuitem">WIKI</a>
-                <a class="navbar-link" href="analytics.html" role="menuitem">STATS</a>
-                <a class="navbar-link active" href="how-to-use.html" role="menuitem">METHOD</a>
-            </div>
-        </nav>
+<body class="text-primary font-body-md min-h-screen flex flex-col">
 
-        <main class="qb-main" style="max-width: 760px; margin: 0 auto;">
-            <h1 class="title-bottom" style="font-size:48px;letter-spacing:-2px;margin-top:48px;line-height:0.95;">
-                THE QUIZVAULT<br/>METHOD.
-            </h1>
-            <p style="font-size:14px;color:var(--grey);margin-top:16px;letter-spacing:1px;">
-                HOW_TO_ACTUALLY_GET_GOOD_AT_QUIZZING // V1
-            </p>
+<!-- NAVBAR -->
+<nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4">
+    <a class="navbar-logo font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html">QUIZVAULT</a>
+    <div class="navbar-links hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase">
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="index.html">HOME</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="questionbank.html">BANK</a>
+        <a class="navbar-link active text-secondary font-bold border-b-2 border-secondary pb-1" href="how-to-use.html" aria-current="page">HOW-TO</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="wiki.html">WIKI</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="analytics.html">STATS</a>
+        <span id="site-health" class="health-badge" title="Site status">●</span>
+    </div>
+    <a href="questionbank.html" class="hidden md:flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow">START_PRACTICE →</a>
+</nav>
 
-            <hr style="border:none;border-top:3px solid var(--ink);margin:48px 0 32px;">
+<!-- MAIN -->
+<main class="w-full max-w-[720px] mx-auto px-4 md:px-margin py-12 md:py-24 flex-grow flex flex-col gap-12">
 
-            <!-- THE THESIS -->
-            <section style="margin-bottom:48px;">
-                <h2 style="font-size:22px;font-weight:900;letter-spacing:-1px;margin-bottom:16px;">
-                    Quizzing is not about facts.
-                </h2>
-                <p style="font-size:16px;line-height:1.65;">
-                    It looks like it is. A quiz question feels isolated. Saffron. Brian Lara. The largest desert in Africa.
-                    Most people learn quiz answers the same way — one fact at a time, hoping enough stick.
-                </p>
-                <p style="font-size:16px;line-height:1.65;margin-top:16px;">
-                    That doesn't scale. There are too many possible questions and not enough hours in your life to memorize each one.
-                </p>
-                <p style="font-size:16px;line-height:1.65;margin-top:16px;font-weight:700;">
-                    Quizzing is actually about <span style="background:var(--ink);color:var(--paper);padding:2px 8px;">lists</span>.
-                </p>
-            </section>
+    <header class="flex flex-col gap-4 border-b-[3px] border-black pb-8">
+        <span class="font-section-label text-section-label text-on-surface-variant uppercase">SYSTEM PROTOCOL // DOCUMENT 004</span>
+        <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase leading-none">The Mechanics<br>Of Memory</h1>
+    </header>
 
-            <!-- WHAT A LIST MEANS -->
-            <section style="border:3px solid var(--ink);padding:32px;margin-bottom:48px;background:rgba(0,0,0,0.02);">
-                <div style="font-size:11px;letter-spacing:3px;color:var(--hot);font-weight:900;margin-bottom:12px;">
-                    DEFINITION
-                </div>
-                <p style="font-size:18px;line-height:1.6;font-weight:500;">
-                    Every quiz answer is one item from a larger list that lives in your head.
-                    The list is the actual knowledge. The fact is just a pointer into it.
-                </p>
-            </section>
+    <blockquote class="border-l-[6px] border-secondary pl-gutter py-2 my-4">
+        <p class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase tracking-tighter leading-[1.05]">
+            "Quizzing is list memorization, not isolated facts."
+        </p>
+    </blockquote>
 
-            <!-- THE EXAMPLE -->
-            <section style="margin-bottom:48px;">
-                <h2 style="font-size:22px;font-weight:900;letter-spacing:-1px;margin-bottom:16px;">
-                    The saffron example.
-                </h2>
-                <p style="font-size:16px;line-height:1.65;">
-                    Say you're asked: <em>From which part of the plant is saffron derived?</em>
-                </p>
-                <p style="font-size:16px;line-height:1.65;margin-top:16px;">
-                    The "fact answer" is: the dried stigmas of the Crocus sativus flower.
-                </p>
-                <p style="font-size:16px;line-height:1.65;margin-top:16px;">
-                    But the <strong>useful</strong> answer — the one that helps you with 20 future questions — is the list this fact belongs to:
-                </p>
+    <section class="flex flex-col gap-6 text-primary">
+        <p class="font-body-md text-body-md leading-relaxed">
+            Standard quizzing platforms fail fundamentally because they treat data points as floating islands. The QuizVault protocol enforces a rigid structural linkage. Every fact is a node in a strictly ordered mental list. You do not learn a fact; you learn its position within a framework.
+        </p>
+        <p class="font-body-md text-body-md leading-relaxed">
+            Consider the <span class="font-bold bg-primary text-on-primary px-1">Saffron Protocol</span> below. It is not three random trivia questions. It is a linear sequence of dependencies.
+        </p>
+    </section>
 
-                <div style="border:3px solid var(--ink);padding:24px;margin-top:24px;box-shadow:6px 6px 0 var(--ink);background:var(--paper);">
-                    <div style="font-size:11px;letter-spacing:2px;color:var(--hot);font-weight:900;margin-bottom:12px;">
-                        LIST_034 // SPICES_BY_PLANT_PART
-                    </div>
-                    <ul style="list-style:none;padding:0;margin:0;font-family:'Courier New',monospace;font-size:14px;line-height:2;">
-                        <li>SAFFRON ───── stigmas (Crocus sativus)</li>
-                        <li>CINNAMON ──── inner bark</li>
-                        <li>CLOVES ────── dried flower buds</li>
-                        <li>TURMERIC ──── rhizome</li>
-                        <li>GINGER ────── rhizome</li>
-                        <li>VANILLA ───── seed pod</li>
-                        <li>PEPPER ────── dried berries</li>
-                        <li>CARDAMOM ──── seed pods</li>
-                        <li>NUTMEG ────── seed kernel</li>
-                        <li>MACE ──────── seed coat (of nutmeg)</li>
-                    </ul>
-                </div>
-
-                <p style="font-size:16px;line-height:1.65;margin-top:24px;">
-                    Once you know this list, you can also answer:
-                </p>
-                <ul style="font-size:15px;line-height:1.8;margin-top:8px;padding-left:24px;">
-                    <li>"What part of the plant is cinnamon?"</li>
-                    <li>"Which spices come from rhizomes?"</li>
-                    <li>"What is mace, and what is it related to?"</li>
-                    <li>"Which seed produces two different spices?"</li>
-                </ul>
-                <p style="font-size:16px;line-height:1.65;margin-top:24px;">
-                    One memorized list. Four guaranteed correct answers. Infinite lateral questions you can now reason your way through.
-                </p>
-            </section>
-
-            <!-- HOW TO USE THE SITE -->
-            <section style="margin-bottom:48px;">
-                <h2 style="font-size:22px;font-weight:900;letter-spacing:-1px;margin-bottom:16px;">
-                    So here's how to use QuizVault.
-                </h2>
-
-                <div style="display:grid;gap:24px;margin-top:24px;">
-                    <div style="border-left:6px solid var(--hot);padding:8px 0 8px 20px;">
-                        <div style="font-size:11px;letter-spacing:2px;color:var(--hot);font-weight:900;">STEP_01</div>
-                        <h3 style="font-size:18px;font-weight:900;margin-top:6px;">Answer the question.</h3>
-                        <p style="font-size:15px;line-height:1.55;margin-top:8px;">
-                            Open practice mode. Type your answer. Get it right or wrong. That's the easy part.
-                        </p>
-                    </div>
-
-                    <div style="border-left:6px solid var(--hot);padding:8px 0 8px 20px;">
-                        <div style="font-size:11px;letter-spacing:2px;color:var(--hot);font-weight:900;">STEP_02</div>
-                        <h3 style="font-size:18px;font-weight:900;margin-top:6px;">Read the funda.</h3>
-                        <p style="font-size:15px;line-height:1.55;margin-top:8px;">
-                            The funda is the context that turns a fact into a story. It's how your brain actually
-                            holds on to information. Don't skip it. Read it slowly.
-                        </p>
-                    </div>
-
-                    <div style="border-left:6px solid var(--hot);padding:8px 0 8px 20px;">
-                        <div style="font-size:11px;letter-spacing:2px;color:var(--hot);font-weight:900;">STEP_03</div>
-                        <h3 style="font-size:18px;font-weight:900;margin-top:6px;">Study the related lists.</h3>
-                        <p style="font-size:15px;line-height:1.55;margin-top:8px;">
-                            Under every answer, you'll see 1-3 "RELATED LISTS." These are the actual mental maps
-                            you should build. Star the ones that feel important. Come back to them in your
-                            <a href="wiki.html" style="color:var(--hot);font-weight:700;">WIKI</a>.
-                        </p>
-                    </div>
-
-                    <div style="border-left:6px solid var(--hot);padding:8px 0 8px 20px;">
-                        <div style="font-size:11px;letter-spacing:2px;color:var(--hot);font-weight:900;">STEP_04</div>
-                        <h3 style="font-size:18px;font-weight:900;margin-top:6px;">Practice retrieval, not recognition.</h3>
-                        <p style="font-size:15px;line-height:1.55;margin-top:8px;">
-                            Re-reading is not studying. Recalling is studying. The site sends questions you got wrong
-                            back at you automatically (SM-2 spaced repetition) — let it. Don't peek.
-                        </p>
-                    </div>
-
-                    <div style="border-left:6px solid var(--hot);padding:8px 0 8px 20px;">
-                        <div style="font-size:11px;letter-spacing:2px;color:var(--hot);font-weight:900;">STEP_05</div>
-                        <h3 style="font-size:18px;font-weight:900;margin-top:6px;">Track your weak topics.</h3>
-                        <p style="font-size:15px;line-height:1.55;margin-top:8px;">
-                            Your <a href="analytics.html" style="color:var(--hot);font-weight:700;">STATS</a> page shows you
-                            which topics you're consistently missing. Practice those. Not the ones you already know.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- THE PROMISE -->
-            <section style="border-top:3px solid var(--ink);padding-top:32px;margin-bottom:64px;">
-                <h2 style="font-size:22px;font-weight:900;letter-spacing:-1px;margin-bottom:16px;">
-                    The promise.
-                </h2>
-                <p style="font-size:16px;line-height:1.65;">
-                    Do this for three months. Twenty minutes a day. You will not become a champion. But you'll be
-                    measurably better than ninety percent of people who say they're "into quizzing." You'll have
-                    real mental maps instead of trivia debris. You'll start seeing connections between questions.
-                </p>
-                <p style="font-size:16px;line-height:1.65;margin-top:16px;font-weight:700;">
-                    That's it. That's the method.
-                </p>
-            </section>
-
-            <!-- CTA -->
-            <div style="text-align:center;margin-bottom:80px;">
-                <a href="questionbank.html" class="btn" style="text-decoration:none;font-size:14px;padding:14px 32px;">
-                    GO_TO_QUESTION_BANK →
-                </a>
-            </div>
-        </main>
+    <!-- Saffron Mental List -->
+    <div class="border-[3px] border-black bg-surface-container hard-shadow p-6 md:p-gutter flex flex-col">
+        <h3 class="font-section-label text-section-label border-b-2 border-black pb-4 mb-4 text-primary uppercase">Example: The Saffron Mental List</h3>
+        <ul class="flex flex-col">
+            <li class="saffron-row flex items-start gap-4 p-4 transition-colors cursor-crosshair">
+                <span class="font-section-label text-section-label mt-1">▪ 01</span>
+                <span class="font-body-md text-body-md">Origin: Derived from the stigmas of the Crocus sativus flower.</span>
+            </li>
+            <li class="saffron-row flex items-start gap-4 p-4 border-t-2 border-black transition-colors cursor-crosshair">
+                <span class="font-section-label text-section-label mt-1">▪ 02</span>
+                <span class="font-body-md text-body-md">Harvest Requirement: Approximately 75,000 flowers are needed to produce a single pound of saffron spice.</span>
+            </li>
+            <li class="saffron-row flex items-start gap-4 p-4 border-t-2 border-black transition-colors cursor-crosshair">
+                <span class="font-section-label text-section-label mt-1">▪ 03</span>
+                <span class="font-body-md text-body-md">Chemical Marker: The primary compound responsible for its distinct flavor is Picrocrocin.</span>
+            </li>
+        </ul>
     </div>
 
-    <!-- DO NOT REMOVE: questions.js MUST load before state.js -->
-    <script src="data/questions.js"></script>
-    <script src="js/error-boundary.js"></script>
-    <script src="js/sanitizer.js"></script>
-    <script src="js/store.js"></script>
-    <script src="js/state.js"></script>
+    <section class="flex flex-col gap-6 text-primary mt-4">
+        <p class="font-body-md text-body-md leading-relaxed">
+            By enforcing this structure, the brain indexes the information spatially. If node 02 is forgotten, node 01 and node 03 provide structural tension to retrieve it. This is the core engine of the Vault.
+        </p>
+    </section>
+
+    <!-- Logic Flow Diagram -->
+    <section class="flex flex-col gap-4 mt-8 mb-12">
+        <h2 class="font-section-label text-section-label uppercase text-on-surface-variant">Logic Flow Diagram // Execution Path</h2>
+        <div class="w-full flex flex-col md:flex-row items-stretch border-[3px] border-black bg-surface hard-shadow">
+            <div class="flex-1 p-6 border-b-2 md:border-b-0 md:border-r-2 border-black flex items-center justify-center bg-surface-container-low">
+                <span class="font-body-md text-body-md font-bold uppercase text-center">Raw<br>Input Data</span>
+            </div>
+            <div class="flex-none p-4 border-b-2 md:border-b-0 md:border-r-2 border-black flex items-center justify-center bg-secondary text-on-secondary">
+                <span class="material-symbols-outlined md:rotate-0 rotate-90" style="font-variation-settings:'FILL' 1;">arrow_forward</span>
+            </div>
+            <div class="flex-1 p-0 border-b-2 md:border-b-0 md:border-r-2 border-black flex flex-col bg-surface-container">
+                <div class="flex-1 p-4 border-b-2 border-black border-dashed flex items-center justify-center">
+                    <span class="font-section-label text-section-label text-center">PARSER ENGINE</span>
+                </div>
+                <div class="flex-1 p-4 flex items-center justify-center">
+                    <span class="font-section-label text-section-label text-center">INDEX ASSIGNMENT</span>
+                </div>
+            </div>
+            <div class="flex-none p-4 border-b-2 md:border-b-0 md:border-r-2 border-black flex items-center justify-center bg-secondary text-on-secondary">
+                <span class="material-symbols-outlined md:rotate-0 rotate-90" style="font-variation-settings:'FILL' 1;">arrow_forward</span>
+            </div>
+            <div class="flex-1 p-6 flex items-center justify-center bg-primary text-on-primary">
+                <span class="font-body-md text-body-md font-bold uppercase tracking-widest text-center">The<br>Vault</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="flex flex-col md:flex-row gap-4 mt-4">
+        <a href="questionbank.html" class="flex-1 bg-secondary text-on-secondary px-6 py-5 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-center">ENTER THE VAULT →</a>
+        <a href="index.html" class="flex-1 bg-transparent text-primary px-6 py-5 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-center">RETURN TO BASE</a>
+    </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4 mt-auto">
+    <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+    <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
+        <a class="hover:text-secondary" href="index.html">HOME</a>
+        <a class="hover:text-secondary" href="questionbank.html">BANK</a>
+        <a class="hover:text-secondary" href="analytics.html">STATS</a>
+    </div>
+</footer>
+
+<!-- DO NOT REMOVE: DATA LOADING -->
+<script src="data/questions.js"></script>
+<script src="js/error-boundary.js"></script>
+<script src="js/sanitizer.js"></script>
+<script src="js/store.js"></script>
+<script src="js/state.js"></script>
+
+<!-- Health badge -->
+<script>
+(function() {
+    var badge = document.getElementById('site-health');
+    if (!badge) return;
+    var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
+    if (qCount === 0)      { badge.classList.add('error');   badge.title = 'CRITICAL: questions.js failed to load'; }
+    else if (qCount < 50)  { badge.classList.add('warning'); badge.title = qCount + ' questions loaded (low)'; }
+    else                   { badge.title = qCount + ' questions loaded — OK'; }
+})();
+</script>
 </body>
 </html>
