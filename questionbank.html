@@ -1,129 +1,189 @@
-<!DOCTYPE html><html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BANK — QUIZVAULT</title>
-    <link rel="stylesheet" href="css/styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZVAULT — Question Bank</title>
 
-    <!-- SEO -->
-    <meta name="description" content="Browse and search our curated GK database.">
-    <meta name="keywords" content="quiz, general knowledge, GK, trivia, practice, question bank, study">
-    <meta name="author" content="QuizVault">
-    <meta name="theme-color" content="#0a0a0a">
+<link rel="stylesheet" href="css/styles.css">
 
-    <!-- OpenGraph -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="QuizVault — Browse Questions">
-    <meta property="og:description" content="Browse and search our curated GK database.">
-    <meta property="og:image" content="images/og_card.png">
-    <meta property="og:url" content="https://quizvault.netlify.app/">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+        colors: {
+            "secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec",
+            "surface-container-low":"#f7f3f2","surface-container-high":"#ebe7e6",
+            "surface-variant":"#e5e2e1","on-secondary":"#fff","on-primary":"#fff",
+            "on-surface-variant":"#444748","primary":"#000","background":"#fdf8f8",
+            "secondary-container":"#e80243","on-tertiary-fixed-variant":"#0024d9",
+            "primary-fixed":"#e5e2e1"
+        },
+        borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
+        spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
+        fontFamily:{
+            "section-label":["JetBrains Mono"],"body-md":["JetBrains Mono"],
+            "hero-display":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],
+            "ui-button":["JetBrains Mono"]
+        },
+        fontSize:{
+            "section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],
+            "body-md":["14px",{lineHeight:"1.5",letterSpacing:"0",fontWeight:"400"}],
+            "ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],
+            "headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],
+            "headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],
+            "hero-display":["96px",{lineHeight:"1.0",letterSpacing:"-4px",fontWeight:"900"}]
+        }
+    }}
+}
+</script>
+<style>
+body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
+.hard-shadow { box-shadow:6px 6px 0 0 #000; transition:all .2s ease; }
+.hard-shadow:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000; }
+.health-badge { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00c853; margin-left:12px; vertical-align:middle; }
+.health-badge.warning { background:#ffb300; } .health-badge.error { background:#ba1a1a; }
+/* Filter pill styling — qb.js injects these */
+#topic-filters button, #difficulty-pills-container button,
+#topic-filters .filter-pill, #difficulty-pills-container .filter-pill {
+    border:2px solid #000; padding:6px 12px; font-family:"JetBrains Mono",monospace;
+    font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    background:#fdf8f8; color:#000; cursor:pointer; margin:2px;
+}
+#topic-filters .active, #difficulty-pills-container .active,
+#topic-filters button.active, #difficulty-pills-container button.active {
+    background:#000; color:#fff;
+}
+#search-input {
+    width:100%; border:3px solid #000; padding:12px; background:#fff;
+    font-family:"JetBrains Mono",monospace; font-size:14px;
+    box-shadow:6px 6px 0 0 #000;
+}
+.sidebar-label {
+    display:block; font-family:"JetBrains Mono",monospace; font-size:11px;
+    font-weight:700; letter-spacing:4px; text-transform:uppercase;
+    color:#444748; margin-bottom:8px;
+}
+#questions-container { display:flex; flex-direction:column; gap:32px; }
+</style>
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="QuizVault — Browse Questions">
-    <meta name="twitter:description" content="Browse and search our curated GK database.">
-    <meta name="twitter:image" content="images/og_card.png">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="images/favicon.png">
-
-<link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="images/favicon-192.png">
+<meta name="description" content="200+ curated GK questions, filterable by topic and difficulty.">
+<link rel="icon" type="image/png" href="images/favicon.png">
 </head>
-<body>
-    <div class="screen-container">
-        <!-- NAVBAR -->
-        <nav class="navbar" role="navigation" aria-label="Main navigation">
-            <a aria-label="QuizVault Home" class="navbar-logo" href="index.html" role="menuitem">
-                QUIZ<span>VAULT</span>
-            </a>
-            <div class="navbar-links" role="menubar">
-                <a class="navbar-link" href="index.html" role="menuitem">HOME</a>
-                <a class="navbar-link active" href="questionbank.html" role="menuitem">BANK</a>
-                <a class="navbar-link" href="wiki.html" role="menuitem">WIKI</a>
-                <a class="navbar-link" href="analytics.html" role="menuitem">STATS</a>
-            <span id="site-health" class="health-badge" title="Site status">●</span></div>
-        </nav>
+<body class="text-primary font-body-md min-h-screen flex flex-col">
 
-        <div class="qb-layout">
-            <!-- SIDEBAR -->
-            <aside class="sidebar">
-                <div style="margin-bottom: 48px;">
-                    <label class="sidebar-label" for="search-input">SEARCH_DB</label>
+<!-- NAVBAR -->
+<nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4">
+    <a class="navbar-logo font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html">QUIZVAULT</a>
+    <div class="navbar-links hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase">
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="index.html">HOME</a>
+        <a class="navbar-link active text-secondary font-bold border-b-2 border-secondary pb-1" href="questionbank.html" aria-current="page">BANK</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="how-to-use.html">HOW-TO</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="wiki.html">WIKI</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="analytics.html">STATS</a>
+        <span id="site-health" class="health-badge" title="Site status">●</span>
+    </div>
+    <button id="practice-btn" class="hidden md:flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow">INIT_PRACTICE →</button>
+</nav>
+
+<!-- MAIN -->
+<main class="flex-grow w-full px-4 md:px-margin py-12">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter max-w-7xl mx-auto">
+
+        <!-- SIDEBAR (filters) -->
+        <aside class="col-span-1 md:col-span-3">
+            <div class="md:sticky md:top-[100px] bg-surface border-[3px] border-black p-6 hard-shadow">
+
+                <h2 class="font-ui-button text-ui-button border-b-2 border-black pb-2 mb-4 uppercase">Filters</h2>
+
+                <div style="margin-bottom:24px;">
+                    <label class="sidebar-label" for="search-input">SEARCH</label>
                     <input type="search" id="search-input" placeholder="TYPE_TO_FIND..." aria-label="Search questions">
                 </div>
 
-                <div id="topic-filters" role="group" aria-labelledby="categories-label" style="margin-bottom: 32px;">
+                <div id="topic-filters" role="group" aria-labelledby="categories-label" style="margin-bottom:24px;">
                     <label class="sidebar-label" id="categories-label">CATEGORIES</label>
-                    <!-- Populated by qb.js -->
+                    <div style="display:flex; flex-wrap:wrap; gap:4px;"></div>
                 </div>
 
-                <div id="difficulty-filters" role="group" aria-labelledby="difficulty-label">
+                <div id="difficulty-filters" role="group" aria-labelledby="difficulty-label" style="margin-bottom:24px;">
                     <label class="sidebar-label" id="difficulty-label">DIFFICULTY</label>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="difficulty-pills-container">
-                        <!-- Populated by qb.js -->
-                    </div>
+                    <div style="display:flex; gap:4px; flex-wrap:wrap;" id="difficulty-pills-container"></div>
                 </div>
-            </aside>
 
-            <!-- MAIN -->
-            <main class="qb-main">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 48px; border-bottom: 3px solid var(--ink); padding-bottom: 16px;">
-                    <div id="status-bar" style="font-size: 13px; font-weight: 700; color: var(--grey);">STATUS: LOADING...</div>
-                    <button class="btn" id="practice-btn">INIT_PRACTICE ?</button>
+                <div style="border-top:2px solid #000; padding-top:12px;">
+                    <div id="status-bar" class="font-section-label text-section-label uppercase text-on-surface-variant">STATUS: LOADING...</div>
                 </div>
-                <div id="questions-container" class="cards-container">
-                    <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed var(--grey); animation: qv-pulse 1.5s infinite;" data-flip-id="skel-1"></div>
-                    <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed var(--grey); animation: qv-pulse 1.5s infinite; animation-delay: 0.2s;" data-flip-id="skel-2"></div>
-                    <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed var(--grey); animation: qv-pulse 1.5s infinite; animation-delay: 0.4s;" data-flip-id="skel-3"></div>
+            </div>
+        </aside>
+
+        <!-- CARDS COLUMN -->
+        <section class="col-span-1 md:col-span-9 flex flex-col gap-8">
+
+            <header class="border-b-2 border-black pb-4 flex items-baseline justify-between">
+                <div>
+                    <div class="font-section-label text-section-label uppercase text-on-surface-variant">VAULT INDEX // DOCUMENT 001</div>
+                    <h1 class="font-headline-lg-mobile md:font-headline-lg font-black uppercase tracking-tighter mt-2">QUESTION BANK</h1>
                 </div>
-            </main>
-        </div>
+                <a href="index.html" class="hidden md:inline font-section-label text-section-label uppercase hover:text-secondary">← HOME</a>
+            </header>
+
+            <!-- qb.js fills this with <quiz-card> elements -->
+            <div id="questions-container" class="cards-container">
+                <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed #747878; animation: qv-pulse 1.5s infinite;" data-flip-id="skel-1"></div>
+                <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed #747878; animation: qv-pulse 1.5s infinite; animation-delay: 0.2s;" data-flip-id="skel-2"></div>
+                <div class="skeleton-card qv-card" style="height: 150px; background: rgba(0,0,0,0.05); border: 3px dashed #747878; animation: qv-pulse 1.5s infinite; animation-delay: 0.4s;" data-flip-id="skel-3"></div>
+            </div>
+        </section>
     </div>
+</main>
 
-    
+<!-- FOOTER -->
+<footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4 mt-auto">
+    <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+    <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
+        <a class="hover:text-secondary" href="index.html">HOME</a>
+        <a class="hover:text-secondary" href="how-to-use.html">HOW-TO</a>
+        <a class="hover:text-secondary" href="analytics.html">STATS</a>
+    </div>
+</footer>
+
 <!-- DO NOT REMOVE: DATA LOADING -->
-    <script src="data/questions.js"></script>
-    <script src="js/error-boundary.js"></script>
-    <script src="js/store.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/sanitizer.js"></script>
-    <script src="js/state.js"></script>
-    <script src="js/youtube-embed.js"></script>
-    <script src="js/cloud-sync.js"></script>
-    <script src="js/sm2.js"></script>
-    <script src="js/components/quiz-card.js"></script>
-    <script src="js/qb.js"></script>
-    <script src="js/practice.js"></script>
-    
-    <script>
-    (function() {
-      var badge = document.getElementById('site-health');
-      if (!badge) return;
-      var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
-      if (qCount === 0) {
-        badge.classList.add('error');
-        badge.title = 'CRITICAL: questions.js failed to load (0 questions)';
-      } else if (qCount < 50) {
-        badge.classList.add('warning');
-        badge.title = qCount + ' questions loaded (low)';
-      } else {
-        badge.title = qCount + ' questions loaded — OK';
-      }
-    })();
-    </script>
-    <script src="js/onboarding.js"></script>
-    <!-- GSAP Animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
-    <script src="js/animations.js"></script>
-
-<script src="js/command-palette.js"></script>
-
+<script src="data/questions.js"></script>
+<script src="js/error-boundary.js"></script>
+<script src="js/store.js"></script>
+<script src="js/api.js"></script>
+<script src="js/sanitizer.js"></script>
+<script src="js/state.js"></script>
+<script src="js/youtube-embed.js"></script>
+<script src="js/cloud-sync.js"></script>
+<script src="js/sm2.js"></script>
+<script src="js/components/quiz-card.js"></script>
+<script src="js/qb.js"></script>
+<script src="js/practice.js"></script>
+<script src="js/onboarding.js"></script>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
-}
+(function() {
+    var badge = document.getElementById('site-health');
+    if (!badge) return;
+    var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
+    if (qCount === 0)      { badge.classList.add('error');   badge.title = 'CRITICAL: questions.js failed to load'; }
+    else if (qCount < 50)  { badge.classList.add('warning'); badge.title = qCount + ' questions loaded (low)'; }
+    else                   { badge.title = qCount + ' questions loaded — OK'; }
+})();
 </script>
-</body></html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/command-palette.js"></script>
+
+</body>
+</html>
