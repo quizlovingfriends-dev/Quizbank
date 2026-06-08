@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZVAULT — Practice Mode</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+        colors: {
+            "secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec",
+            "surface-container-low":"#f7f3f2","surface-variant":"#e5e2e1",
+            "on-secondary":"#fff","on-primary":"#fff","on-surface-variant":"#444748",
+            "primary":"#000","background":"#fdf8f8","secondary-container":"#e80243",
+            "primary-fixed":"#e5e2e1"
+        },
+        borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
+        spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
+        fontFamily:{
+            "section-label":["JetBrains Mono"],"body-md":["JetBrains Mono"],
+            "hero-display":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],
+            "ui-button":["JetBrains Mono"]
+        },
+        fontSize:{
+            "section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],
+            "body-md":["14px",{lineHeight:"1.5",letterSpacing:"0",fontWeight:"400"}],
+            "ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],
+            "headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],
+            "headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],
+            "hero-display":["96px",{lineHeight:"1.0",letterSpacing:"-4px",fontWeight:"900"}]
+        }
+    }}
+}
+</script>
+<style>
+body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
+.hard-shadow { box-shadow:6px 6px 0 0 #000; transition:all .2s ease; }
+.hard-shadow:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000; }
+.health-badge { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00c853; margin-left:12px; vertical-align:middle; }
+.health-badge.warning { background:#ffb300; } .health-badge.error { background:#ba1a1a; }
+</style>
+
+<meta name="description" content="QuizVault Practice — type-and-verify mode with timer, streak, spaced repetition.">
+<link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body class="text-primary font-body-md min-h-screen flex flex-col">
+
+<!-- NAVBAR -->
+<nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4">
+    <a class="navbar-logo font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html">QUIZVAULT</a>
+    <div class="navbar-links hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase">
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="index.html">HOME</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="questionbank.html">BANK</a>
+        <a class="navbar-link active text-secondary font-bold border-b-2 border-secondary pb-1" href="practice.html" aria-current="page">PRACTICE</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="daily.html">DAILY</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="how-to-use.html">HOW-TO</a>
+        <span id="site-health" class="health-badge" title="Site status">●</span>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin py-12 max-w-4xl mx-auto w-full">
+
+    <div class="border-l-[6px] border-secondary pl-gutter mb-12 self-start">
+        <div class="font-section-label text-section-label uppercase text-on-surface-variant mb-4">SYSTEM PROTOCOL // DOCUMENT 002</div>
+        <h1 class="font-headline-lg-mobile md:font-headline-lg font-black text-primary uppercase tracking-tighter leading-none">PRACTICE MODE</h1>
+    </div>
+
+    <!-- Launcher card -->
+    <div class="w-full bg-surface border-[3px] border-black hard-shadow p-8 md:p-12">
+        <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter mb-4">TYPE_AND_VERIFY</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-8 max-w-2xl">
+            Configure your session below — choose mode, topics, difficulty, and timer. The vault retrieves a deterministic question set. You type the exact term. The vault verifies. Accuracy is prioritized over speed; streaks compound retention through spaced repetition.
+        </p>
+
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 border-y-2 border-black py-6">
+            <div>
+                <div class="font-hero-display text-[32px] md:text-[48px] font-black leading-none" id="practice-stat-total">—</div>
+                <div class="font-section-label text-section-label uppercase mt-2">TOTAL_QS</div>
+            </div>
+            <div>
+                <div class="font-hero-display text-[32px] md:text-[48px] font-black leading-none text-secondary" id="practice-stat-accuracy">—</div>
+                <div class="font-section-label text-section-label uppercase mt-2">ACCURACY</div>
+            </div>
+            <div>
+                <div class="font-hero-display text-[32px] md:text-[48px] font-black leading-none" id="practice-stat-streak">0</div>
+                <div class="font-section-label text-section-label uppercase mt-2">DAY_STREAK</div>
+            </div>
+            <div>
+                <div class="font-hero-display text-[32px] md:text-[48px] font-black leading-none" id="practice-stat-weak">0</div>
+                <div class="font-section-label text-section-label uppercase mt-2">WEAK_CARDS</div>
+            </div>
+        </div>
+
+        <!-- CTA buttons (both use existing practice.js modal triggers) -->
+        <div class="flex flex-col md:flex-row gap-4">
+            <button id="hero-practice-btn" class="flex-1 bg-secondary text-on-secondary px-8 py-6 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-xl" aria-haspopup="dialog">
+                BEGIN_SESSION →
+            </button>
+            <button id="drill-weak-btn" class="flex-1 bg-transparent text-primary px-8 py-6 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-xl">
+                DRILL_WEAK_CARDS
+            </button>
+        </div>
+
+        <p class="font-section-label text-section-label uppercase text-on-surface-variant mt-6">
+            KEYBOARD: ENTER TO CHECK · ESC TO END · ↓ FOR NEXT
+        </p>
+    </div>
+
+    <!-- Methodology link -->
+    <a href="how-to-use.html" class="mt-8 font-section-label text-section-label uppercase hover:text-secondary self-start">
+        ← READ_THE_PROTOCOL // WHY LISTS, NOT FACTS
+    </a>
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4 mt-auto">
+    <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+    <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
+        <a class="hover:text-secondary" href="index.html">HOME</a>
+        <a class="hover:text-secondary" href="questionbank.html">BANK</a>
+        <a class="hover:text-secondary" href="daily.html">DAILY</a>
+    </div>
+</footer>
+
+<!-- DO NOT REMOVE: DATA LOADING -->
+<script src="data/questions.js"></script>
+<script src="js/error-boundary.js"></script>
+<script src="js/store.js"></script>
+<script src="js/api.js"></script>
+<script src="js/sanitizer.js"></script>
+<script src="js/state.js"></script>
+<script src="js/youtube-embed.js"></script>
+<script src="js/cloud-sync.js"></script>
+<script src="js/sm2.js"></script>
+<script src="js/practice.js"></script>
+
+<!-- Live stats + health badge -->
+<script>
+(function() {
+    var qs = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS : [];
+
+    var badge = document.getElementById('site-health');
+    if (badge) {
+        if (qs.length === 0)      { badge.classList.add('error');   badge.title = 'CRITICAL: questions.js failed to load'; }
+        else if (qs.length < 50)  { badge.classList.add('warning'); badge.title = qs.length + ' questions loaded (low)'; }
+        else                      { badge.title = qs.length + ' questions loaded — OK'; }
+    }
+
+    function setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+    setText('practice-stat-total', qs.length);
+
+    try {
+        var sm = JSON.parse(localStorage.getItem('qv_sm2_state') || '{}');
+        var correct = 0, total = 0, weak = 0;
+        Object.keys(sm).forEach(function(k){
+            var card = sm[k];
+            if (card && typeof card.correct === 'number' && typeof card.attempts === 'number') {
+                correct += card.correct; total += card.attempts;
+                if (card.attempts > 0 && (card.correct / card.attempts) < 0.5) weak++;
+            }
+        });
+        if (total > 0) setText('practice-stat-accuracy', Math.round((correct/total)*100) + '%');
+        setText('practice-stat-weak', weak);
+        setText('practice-stat-streak', parseInt(localStorage.getItem('qv_day_streak') || '0', 10));
+    } catch (e) { /* ignore */ }
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/animations.js"></script>
+</body>
+</html>
