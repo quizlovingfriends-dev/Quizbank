@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QUIZVAULT — The Mechanics of Memory</title>
+<title>QUIZVAULT — How To Quiz</title>
 
 <link rel="stylesheet" href="css/styles.css">
 
@@ -14,14 +14,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <script>
 tailwind.config = {
-    darkMode: "class",
-    theme: { extend: {
-        colors: {
+    darkMode:"class",
+    theme:{ extend:{
+        colors:{
             "secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec",
             "surface-container-low":"#f7f3f2","surface-variant":"#e5e2e1",
             "on-secondary":"#fff","on-primary":"#fff","on-surface-variant":"#444748",
-            "primary":"#000","background":"#fdf8f8","secondary-container":"#e80243",
-            "on-tertiary-fixed-variant":"#0024d9"
+            "primary":"#000","background":"#fdf8f8"
         },
         borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
         spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
@@ -32,7 +31,7 @@ tailwind.config = {
         },
         fontSize:{
             "section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],
-            "body-md":["14px",{lineHeight:"1.6",letterSpacing:"0",fontWeight:"400"}],
+            "body-md":["15px",{lineHeight:"1.7",letterSpacing:"0",fontWeight:"400"}],
             "ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],
             "headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],
             "headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],
@@ -47,10 +46,14 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
 .hard-shadow:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000; }
 .health-badge { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00c853; margin-left:12px; vertical-align:middle; }
 .health-badge.warning { background:#ffb300; } .health-badge.error { background:#ba1a1a; }
-.saffron-row:hover { background:#1e3afa; color:#fdf8f8; }
+.answer-reveal { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.answer-reveal.open { max-height: 1000px; }
+.list-row { padding:12px 16px; border-top:2px solid #000; font-family:"JetBrains Mono",monospace; }
+.list-row:first-child { border-top:none; }
+.list-row .num { display:inline-block; width:32px; font-weight:700; color:#ba0034; }
 </style>
 
-<meta name="description" content="QuizVault Protocol: why quizzing is list memorization, not isolated facts.">
+<meta name="description" content="How to quiz: discover lists, not facts. Essential lists every quizzer should know.">
 <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 <body class="text-primary font-body-md min-h-screen flex flex-col">
@@ -61,103 +64,193 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
     <div class="navbar-links hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase">
         <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="index.html">HOME</a>
         <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="questionbank.html">BANK</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="practice.html">PRACTICE</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="daily.html">DAILY</a>
         <a class="navbar-link active text-secondary font-bold border-b-2 border-secondary pb-1" href="how-to-use.html" aria-current="page">HOW-TO</a>
-        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="wiki.html">WIKI</a>
-        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="analytics.html">STATS</a>
         <span id="site-health" class="health-badge" title="Site status">●</span>
     </div>
-    <a href="questionbank.html" class="hidden md:flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow">START_PRACTICE →</a>
+    <a href="practice.html" class="hidden md:flex bg-secondary text-on-secondary px-6 py-3 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow">START_PRACTICE →</a>
 </nav>
 
-<!-- MAIN -->
-<main class="w-full max-w-[720px] mx-auto px-4 md:px-margin py-12 md:py-24 flex-grow flex flex-col gap-12">
+<main class="w-full max-w-[760px] mx-auto px-4 md:px-margin py-12 md:py-20 flex-grow flex flex-col gap-16">
 
+    <!-- HEADER -->
     <header class="flex flex-col gap-4 border-b-[3px] border-black pb-8">
-        <span class="font-section-label text-section-label text-on-surface-variant uppercase">SYSTEM PROTOCOL // DOCUMENT 004</span>
-        <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase leading-none">The Mechanics<br>Of Memory</h1>
+        <span class="font-section-label text-section-label text-on-surface-variant uppercase">METHOD // DOCUMENT 001</span>
+        <h1 class="font-headline-lg-mobile md:font-headline-lg font-black uppercase leading-none">How To Quiz</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant">A short lesson on the only thing that matters: <strong class="text-primary">lists</strong>.</p>
     </header>
 
-    <blockquote class="border-l-[6px] border-secondary pl-gutter py-2 my-4">
-        <p class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase tracking-tighter leading-[1.05]">
-            "Quizzing is list memorization, not isolated facts."
-        </p>
-    </blockquote>
+    <!-- STEP 1: THE QUESTION -->
+    <section class="flex flex-col gap-6">
+        <div class="font-section-label text-section-label uppercase text-secondary">STEP 01 // TRY THIS</div>
+        <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter">Answer this question.</h2>
 
-    <section class="flex flex-col gap-6 text-primary">
-        <p class="font-body-md text-body-md leading-relaxed">
-            Standard quizzing platforms fail fundamentally because they treat data points as floating islands. The QuizVault protocol enforces a rigid structural linkage. Every fact is a node in a strictly ordered mental list. You do not learn a fact; you learn its position within a framework.
-        </p>
-        <p class="font-body-md text-body-md leading-relaxed">
-            Consider the <span class="font-bold bg-primary text-on-primary px-1">Saffron Protocol</span> below. It is not three random trivia questions. It is a linear sequence of dependencies.
-        </p>
-    </section>
-
-    <!-- Saffron Mental List -->
-    <div class="border-[3px] border-black bg-surface-container hard-shadow p-6 md:p-gutter flex flex-col">
-        <h3 class="font-section-label text-section-label border-b-2 border-black pb-4 mb-4 text-primary uppercase">Example: The Saffron Mental List</h3>
-        <ul class="flex flex-col">
-            <li class="saffron-row flex items-start gap-4 p-4 transition-colors cursor-crosshair">
-                <span class="font-section-label text-section-label mt-1">▪ 01</span>
-                <span class="font-body-md text-body-md">Origin: Derived from the stigmas of the Crocus sativus flower.</span>
-            </li>
-            <li class="saffron-row flex items-start gap-4 p-4 border-t-2 border-black transition-colors cursor-crosshair">
-                <span class="font-section-label text-section-label mt-1">▪ 02</span>
-                <span class="font-body-md text-body-md">Harvest Requirement: Approximately 75,000 flowers are needed to produce a single pound of saffron spice.</span>
-            </li>
-            <li class="saffron-row flex items-start gap-4 p-4 border-t-2 border-black transition-colors cursor-crosshair">
-                <span class="font-section-label text-section-label mt-1">▪ 03</span>
-                <span class="font-body-md text-body-md">Chemical Marker: The primary compound responsible for its distinct flavor is Picrocrocin.</span>
-            </li>
-        </ul>
-    </div>
-
-    <section class="flex flex-col gap-6 text-primary mt-4">
-        <p class="font-body-md text-body-md leading-relaxed">
-            By enforcing this structure, the brain indexes the information spatially. If node 02 is forgotten, node 01 and node 03 provide structural tension to retrieve it. This is the core engine of the Vault.
-        </p>
-    </section>
-
-    <!-- Logic Flow Diagram -->
-    <section class="flex flex-col gap-4 mt-8 mb-12">
-        <h2 class="font-section-label text-section-label uppercase text-on-surface-variant">Logic Flow Diagram // Execution Path</h2>
-        <div class="w-full flex flex-col md:flex-row items-stretch border-[3px] border-black bg-surface hard-shadow">
-            <div class="flex-1 p-6 border-b-2 md:border-b-0 md:border-r-2 border-black flex items-center justify-center bg-surface-container-low">
-                <span class="font-body-md text-body-md font-bold uppercase text-center">Raw<br>Input Data</span>
-            </div>
-            <div class="flex-none p-4 border-b-2 md:border-b-0 md:border-r-2 border-black flex items-center justify-center bg-secondary text-on-secondary">
-                <span class="material-symbols-outlined md:rotate-0 rotate-90" style="font-variation-settings:'FILL' 1;">arrow_forward</span>
-            </div>
-            <div class="flex-1 p-0 border-b-2 md:border-b-0 md:border-r-2 border-black flex flex-col bg-surface-container">
-                <div class="flex-1 p-4 border-b-2 border-black border-dashed flex items-center justify-center">
-                    <span class="font-section-label text-section-label text-center">PARSER ENGINE</span>
+        <div class="bg-surface border-[3px] border-black hard-shadow p-6 md:p-8">
+            <p class="font-body-md text-[18px] md:text-[20px] leading-relaxed font-bold mb-6">
+                Which Indian Prime Minister was assassinated in 1984?
+            </p>
+            <button id="reveal-btn" class="w-full bg-surface-container border-[3px] border-black py-3 font-ui-button text-ui-button uppercase hover:bg-primary hover:text-on-primary transition-colors">
+                CLICK TO REVEAL ↓
+            </button>
+            <div id="reveal-content" class="answer-reveal">
+                <div class="mt-6 p-6 bg-secondary text-on-secondary border-[3px] border-black">
+                    <div class="font-section-label text-section-label uppercase opacity-70 mb-2">ANSWER</div>
+                    <div class="font-headline-lg-mobile font-black uppercase">Indira Gandhi</div>
                 </div>
-                <div class="flex-1 p-4 flex items-center justify-center">
-                    <span class="font-section-label text-section-label text-center">INDEX ASSIGNMENT</span>
-                </div>
-            </div>
-            <div class="flex-none p-4 border-b-2 md:border-b-0 md:border-r-2 border-black flex items-center justify-center bg-secondary text-on-secondary">
-                <span class="material-symbols-outlined md:rotate-0 rotate-90" style="font-variation-settings:'FILL' 1;">arrow_forward</span>
-            </div>
-            <div class="flex-1 p-6 flex items-center justify-center bg-primary text-on-primary">
-                <span class="font-body-md text-body-md font-bold uppercase tracking-widest text-center">The<br>Vault</span>
             </div>
         </div>
     </section>
 
+    <!-- STEP 2: WHAT YOU ACTUALLY LEARNED -->
+    <section class="flex flex-col gap-6">
+        <div class="font-section-label text-section-label uppercase text-secondary">STEP 02 // THE TRUTH</div>
+        <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter">You didn't learn a fact.<br>You discovered a list.</h2>
+
+        <p class="font-body-md text-body-md leading-relaxed">
+            The wrong way to learn this: <em>"Indira Gandhi was assassinated in 1984."</em> One floating fact. Easy to forget. Useless for the next 100 related questions a quizmaster might ask.
+        </p>
+
+        <p class="font-body-md text-body-md leading-relaxed">
+            The right way: the moment you saw <strong>"Indian Prime Minister, 1984"</strong>, your brain should not have searched for a single name. It should have pulled up <strong class="bg-primary text-on-primary px-1">THE FULL LIST OF INDIAN PRIME MINISTERS</strong> and counted to find who was in office.
+        </p>
+
+        <p class="font-body-md text-body-md leading-relaxed">
+            Once you have that list at the tip of your tongue, you can answer fifty questions instead of one. Who succeeded her? Who came before? Who was the first? Who served the longest? Who was non-Congress? <strong>All the same list.</strong>
+        </p>
+    </section>
+
+    <!-- STEP 3: THE LIST -->
+    <section class="flex flex-col gap-6">
+        <div class="font-section-label text-section-label uppercase text-secondary">STEP 03 // THE LIST</div>
+        <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter">Here is the list.</h2>
+        <p class="font-body-md text-body-md leading-relaxed">Memorize it in order. Not their dates. Not their parties. Just the <strong>sequence</strong>. Dates and parties become easy once the sequence is locked.</p>
+
+        <div class="bg-surface border-[3px] border-black hard-shadow">
+            <div class="bg-primary text-on-primary p-4 border-b-2 border-black">
+                <div class="font-section-label text-section-label uppercase tracking-[4px]">LIST 001</div>
+                <div class="font-headline-lg-mobile font-black uppercase mt-1">PRIME MINISTERS OF INDIA</div>
+            </div>
+            <div>
+                <div class="list-row"><span class="num">01</span> Jawaharlal Nehru</div>
+                <div class="list-row"><span class="num">02</span> Gulzarilal Nanda <span class="opacity-60">(acting)</span></div>
+                <div class="list-row"><span class="num">03</span> Lal Bahadur Shastri</div>
+                <div class="list-row"><span class="num">04</span> Gulzarilal Nanda <span class="opacity-60">(acting)</span></div>
+                <div class="list-row"><span class="num">05</span> Indira Gandhi <span class="text-secondary font-bold">← assassinated 1984</span></div>
+                <div class="list-row"><span class="num">06</span> Morarji Desai</div>
+                <div class="list-row"><span class="num">07</span> Charan Singh</div>
+                <div class="list-row"><span class="num">08</span> Indira Gandhi <span class="opacity-60">(2nd term)</span></div>
+                <div class="list-row"><span class="num">09</span> Rajiv Gandhi</div>
+                <div class="list-row"><span class="num">10</span> V. P. Singh</div>
+                <div class="list-row"><span class="num">11</span> Chandra Shekhar</div>
+                <div class="list-row"><span class="num">12</span> P. V. Narasimha Rao</div>
+                <div class="list-row"><span class="num">13</span> Atal Bihari Vajpayee</div>
+                <div class="list-row"><span class="num">14</span> H. D. Deve Gowda</div>
+                <div class="list-row"><span class="num">15</span> I. K. Gujral</div>
+                <div class="list-row"><span class="num">16</span> Atal Bihari Vajpayee <span class="opacity-60">(2nd, 3rd terms)</span></div>
+                <div class="list-row"><span class="num">17</span> Manmohan Singh</div>
+                <div class="list-row"><span class="num">18</span> Narendra Modi</div>
+            </div>
+        </div>
+
+        <p class="font-body-md text-body-md leading-relaxed">
+            Look at the list. Notice Indira appears <strong>twice</strong> (positions 5 and 8). Notice Vajpayee appears at 13 and 16. Notice the Gandhi pattern: Indira → Rajiv. These structural facts are <em>free knowledge</em> once you see the list.
+        </p>
+    </section>
+
+    <!-- STEP 4: WHY LISTS WIN -->
+    <section class="flex flex-col gap-6">
+        <div class="font-section-label text-section-label uppercase text-secondary">STEP 04 // WHY IT WORKS</div>
+        <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter">Why lists beat facts.</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+            <div class="border-[3px] border-black p-6 hard-shadow">
+                <div class="font-section-label text-section-label uppercase text-on-surface-variant mb-2">REASON 01</div>
+                <div class="font-body-md text-body-md leading-relaxed">If you forget item #5, items #4 and #6 act like bookends and <strong>pull it back into memory</strong>. Isolated facts have no bookends.</div>
+            </div>
+            <div class="border-[3px] border-black p-6 hard-shadow">
+                <div class="font-section-label text-section-label uppercase text-on-surface-variant mb-2">REASON 02</div>
+                <div class="font-body-md text-body-md leading-relaxed">One list answers dozens of question variations: first, last, longest, shortest, before, after, only one to ___, etc. <strong>1 list = 50 facts.</strong></div>
+            </div>
+            <div class="border-[3px] border-black p-6 hard-shadow">
+                <div class="font-section-label text-section-label uppercase text-on-surface-variant mb-2">REASON 03</div>
+                <div class="font-body-md text-body-md leading-relaxed">Lists have <strong>structure</strong> — order, pattern, repetition, gaps. Your brain remembers structure far better than scattered datapoints.</div>
+            </div>
+            <div class="border-[3px] border-black p-6 hard-shadow">
+                <div class="font-section-label text-section-label uppercase text-on-surface-variant mb-2">REASON 04</div>
+                <div class="font-body-md text-body-md leading-relaxed">When a new question comes, you don't <em>recall</em> — you <em>look up the slot</em>. Faster, more accurate, less anxious.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STEP 5: HOW TO MAKE LISTS -->
+    <section class="flex flex-col gap-6">
+        <div class="font-section-label text-section-label uppercase text-secondary">STEP 05 // YOUR JOB</div>
+        <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter">How to build your own.</h2>
+
+        <ol class="flex flex-col gap-4 font-body-md text-body-md leading-relaxed">
+            <li class="border-l-[4px] border-secondary pl-4">
+                <strong>Every time you miss a question</strong>, ask yourself: <em>"What list does this fact belong to?"</em> The answer is almost always sitting on Wikipedia under "List of ___".
+            </li>
+            <li class="border-l-[4px] border-secondary pl-4">
+                <strong>Write the list down.</strong> A notebook. A Notion page. A text file. Doesn't matter. The act of writing it commits it. Looking it up doesn't.
+            </li>
+            <li class="border-l-[4px] border-secondary pl-4">
+                <strong>Memorize sequence first, details second.</strong> First just the names in order. Once locked, then add dates, then add parties, then add quirky facts. One layer at a time.
+            </li>
+            <li class="border-l-[4px] border-secondary pl-4">
+                <strong>Recite the list daily for a week</strong>, then weekly. Without looking. Out loud, ideally. This is how the list moves from "I can find it" to "tip of the tongue."
+            </li>
+        </ol>
+    </section>
+
+    <!-- STEP 6: ESSENTIAL LISTS -->
+    <section class="flex flex-col gap-6">
+        <div class="font-section-label text-section-label uppercase text-secondary">STEP 06 // STARTER PACK</div>
+        <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter">Lists every quizzer should own.</h2>
+        <p class="font-body-md text-body-md leading-relaxed">If you don't have these at the tip of your tongue (and written down somewhere safe), start now. In order of how often they show up in quizzes:</p>
+
+        <div class="border-[3px] border-black hard-shadow">
+            <div class="list-row"><span class="num">▪</span> Prime Ministers of India (in order)</div>
+            <div class="list-row"><span class="num">▪</span> Presidents of India (in order)</div>
+            <div class="list-row"><span class="num">▪</span> Presidents of the United States (at least 20th-21st century)</div>
+            <div class="list-row"><span class="num">▪</span> UN Secretaries-General</div>
+            <div class="list-row"><span class="num">▪</span> Nobel Peace Prize winners (last 25 years)</div>
+            <div class="list-row"><span class="num">▪</span> Olympic host cities (Summer, last 50 years)</div>
+            <div class="list-row"><span class="num">▪</span> FIFA World Cup winners (every edition)</div>
+            <div class="list-row"><span class="num">▪</span> Cricket World Cup winners</div>
+            <div class="list-row"><span class="num">▪</span> Capitals of every country (start with G20)</div>
+            <div class="list-row"><span class="num">▪</span> Currency of every country (same priority)</div>
+            <div class="list-row"><span class="num">▪</span> Indian states & their capitals</div>
+            <div class="list-row"><span class="num">▪</span> Indian states & their CMs (current)</div>
+            <div class="list-row"><span class="num">▪</span> Rivers of India (with origin + tributaries)</div>
+            <div class="list-row"><span class="num">▪</span> Mughal Emperors (in order)</div>
+            <div class="list-row"><span class="num">▪</span> Viceroys of India (key ones)</div>
+            <div class="list-row"><span class="num">▪</span> Booker Prize winners (last 20 years)</div>
+            <div class="list-row"><span class="num">▪</span> Oscar Best Picture winners (last 20 years)</div>
+            <div class="list-row"><span class="num">▪</span> Bharat Ratna recipients (recent)</div>
+            <div class="list-row"><span class="num">▪</span> CEOs of FAANG companies (current)</div>
+            <div class="list-row"><span class="num">▪</span> Highest mountains (top 10 of world + top 5 of India)</div>
+        </div>
+
+        <p class="font-body-md text-body-md leading-relaxed italic">
+            That's it. Twenty lists. Maybe a few hundred names. With those in your head, you'll answer most questions a quizmaster throws.
+        </p>
+    </section>
+
     <!-- CTA -->
-    <section class="flex flex-col md:flex-row gap-4 mt-4">
-        <a href="questionbank.html" class="flex-1 bg-secondary text-on-secondary px-6 py-5 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-center">ENTER THE VAULT →</a>
-        <a href="index.html" class="flex-1 bg-transparent text-primary px-6 py-5 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-center">RETURN TO BASE</a>
+    <section class="flex flex-col md:flex-row gap-4 mt-4 mb-12">
+        <a href="questionbank.html" class="flex-1 bg-secondary text-on-secondary px-6 py-5 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-center">START WITH THE QUESTION BANK →</a>
+        <a href="daily.html" class="flex-1 bg-transparent text-primary px-6 py-5 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-center">DO TODAY'S BRIEFING</a>
     </section>
 </main>
 
-<!-- FOOTER -->
 <footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4 mt-auto">
     <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
     <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
         <a class="hover:text-secondary" href="index.html">HOME</a>
         <a class="hover:text-secondary" href="questionbank.html">BANK</a>
-        <a class="hover:text-secondary" href="analytics.html">STATS</a>
+        <a class="hover:text-secondary" href="practice.html">PRACTICE</a>
     </div>
 </footer>
 
@@ -167,6 +260,38 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
 <script src="js/sanitizer.js"></script>
 <script src="js/store.js"></script>
 <script src="js/state.js"></script>
+
+<!-- Reveal toggle -->
+<script>
+document.getElementById('reveal-btn').addEventListener('click', function () {
+    var c = document.getElementById('reveal-content');
+    c.classList.toggle('open');
+    this.textContent = c.classList.contains('open') ? 'HIDE ANSWER ↑' : 'CLICK TO REVEAL ↓';
+});
+</script>
+
+<!-- GSAP animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/animations.js"></script>
+<script>
+window.addEventListener('load', function () {
+    if (!window.gsap) return;
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('section').forEach(function (sec) {
+        gsap.from(sec, {
+            y: 60, opacity: 0, duration: 0.6, ease: 'back.out(1.4)',
+            scrollTrigger: { trigger: sec, start: 'top 88%' }
+        });
+    });
+    gsap.utils.toArray('.list-row').forEach(function (row, i) {
+        gsap.from(row, {
+            x: -20, opacity: 0, duration: 0.3, delay: i * 0.02,
+            scrollTrigger: { trigger: row, start: 'top 95%' }
+        });
+    });
+});
+</script>
 
 <!-- Health badge -->
 <script>

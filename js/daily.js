@@ -108,7 +108,18 @@
         var savedAnswer = (state[qid] || {}).answer || '';
         var savedCorrect = (state[qid] || {}).correct;
         var qText = (q.question && q.question.text) || q.question_text || '';
+        var qImage = (q.question && q.question.image) || q.question_image_path || null;
         var topic = topicLabel(q.topic);
+
+        var imageHtml = '';
+        if (qImage && typeof qImage === 'string') {
+            imageHtml =
+                '<div class="border-[3px] border-black mb-8 max-w-2xl">' +
+                    '<img src="' + escapeHtml(qImage) + '" alt="Question image" ' +
+                         'style="display:block;width:100%;height:auto;max-height:420px;object-fit:contain;background:#f7f3f2;" ' +
+                         'onerror="this.parentNode.style.display=\'none\'">' +
+                '</div>';
+        }
 
         return (
             '<article class="bg-surface border-[3px] border-black hard-shadow daily-q-card" data-qid="' + qid + '">' +
@@ -117,9 +128,10 @@
                     '<span class="font-section-label text-section-label text-surface-variant">' + escapeHtml(topic) + '</span>' +
                 '</header>' +
                 '<div class="p-6 md:p-8">' +
-                    '<p class="font-body-md text-[18px] md:text-[22px] leading-relaxed text-primary mb-8 font-bold">' +
+                    '<p class="font-body-md text-[18px] md:text-[22px] leading-relaxed text-primary mb-6 font-bold">' +
                         escapeHtml(qText) +
                     '</p>' +
+                    imageHtml +
                     '<div class="space-y-3">' +
                         '<label class="block font-section-label text-section-label text-primary" for="q-' + qid + '-input">YOUR ANSWER :</label>' +
                         '<input id="q-' + qid + '-input" type="text" ' +

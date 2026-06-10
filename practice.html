@@ -180,5 +180,12 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/animations.js"></script>
+<script>
+window.addEventListener('load', function () {
+    if (!window.gsap) return;
+    gsap.from('h1', { y: -40, opacity: 0, duration: 0.7, ease: 'power3.out' });
+    gsap.from('.hard-shadow', { y: 60, opacity: 0, scale: 0.95, duration: 0.6, ease: 'back.out(1.6)', delay: 0.2 });
+});
+</script>
 </body>
 </html>
