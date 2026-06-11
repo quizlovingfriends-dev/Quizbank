@@ -75,8 +75,11 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
         <h1 class="font-headline-lg-mobile md:font-headline-lg font-black text-primary uppercase tracking-tighter leading-none">PRACTICE MODE</h1>
     </div>
 
+    <!-- Stage (filled by practice-page.js when a session starts) -->
+    <div id="practice-stage" style="display:none; width:100%;"></div>
+
     <!-- Launcher card -->
-    <div class="w-full bg-surface border-[3px] border-black hard-shadow p-8 md:p-12">
+    <div id="practice-launcher" class="w-full bg-surface border-[3px] border-black hard-shadow p-8 md:p-12">
         <h2 class="font-headline-lg-mobile font-black uppercase tracking-tighter mb-4">TYPE_AND_VERIFY</h2>
         <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-8 max-w-2xl">
             Configure your session below — choose mode, topics, difficulty, and timer. The vault retrieves a deterministic question set. You type the exact term. The vault verifies. Accuracy is prioritized over speed; streaks compound retention through spaced repetition.
@@ -104,7 +107,7 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
 
         <!-- CTA buttons (both use existing practice.js modal triggers) -->
         <div class="flex flex-col md:flex-row gap-4">
-            <button id="hero-practice-btn" class="flex-1 bg-secondary text-on-secondary px-8 py-6 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-xl" aria-haspopup="dialog">
+            <button id="hero-practice-btn" class="flex-1 bg-secondary text-on-secondary px-8 py-6 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-xl">
                 BEGIN_SESSION →
             </button>
             <button id="drill-weak-btn" class="flex-1 bg-transparent text-primary px-8 py-6 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow text-xl">
@@ -143,7 +146,7 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
 <script src="js/youtube-embed.js"></script>
 <script src="js/cloud-sync.js"></script>
 <script src="js/sm2.js"></script>
-<script src="js/practice.js"></script>
+<script src="js/practice-page.js"></script>
 
 <!-- Live stats + health badge -->
 <script>

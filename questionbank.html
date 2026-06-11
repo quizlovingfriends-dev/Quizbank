@@ -70,6 +70,71 @@ body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
     color:#444748; margin-bottom:8px;
 }
 #questions-container { display:flex; flex-direction:column; gap:32px; }
+
+/* ===== <quiz-card> brutalist override ===== */
+quiz-card .question-card {
+    background:#fdf8f8 !important; border:3px solid #000 !important; border-radius:0 !important;
+    box-shadow:6px 6px 0 0 #000 !important; transition:all .2s ease !important;
+    padding:0 !important; position:relative; overflow:visible;
+}
+quiz-card .question-card:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000 !important; }
+quiz-card .card-header {
+    background:#000 !important; color:#fff !important; padding:14px 20px !important;
+    border-bottom:2px solid #000 !important; display:flex !important; justify-content:space-between !important;
+    align-items:center !important; gap:12px !important;
+}
+quiz-card .card-num {
+    font-family:"JetBrains Mono",monospace !important; font-size:11px !important;
+    letter-spacing:4px !important; font-weight:700 !important; color:#fff !important;
+}
+quiz-card .topic-badge {
+    background:#0024d9 !important; color:#fff !important; padding:4px 10px !important;
+    font-family:"JetBrains Mono",monospace !important; font-size:10px !important;
+    letter-spacing:3px !important; font-weight:700 !important;
+}
+quiz-card .card-header button {
+    color:#fff !important; opacity:.85;
+}
+quiz-card .card-header button:hover { opacity:1; color:#ba0034 !important; }
+quiz-card .card-body { padding:20px 24px !important; }
+quiz-card .question-text {
+    font-family:"JetBrains Mono",monospace !important; font-size:17px !important;
+    line-height:1.55 !important; color:#000 !important; font-weight:700 !important;
+    margin-bottom:16px !important;
+}
+quiz-card .reveal-btn {
+    width:100% !important; background:#f1edec !important; color:#000 !important;
+    border:3px solid #000 !important; padding:14px !important;
+    font-family:"JetBrains Mono",monospace !important; font-size:13px !important;
+    font-weight:700 !important; letter-spacing:2px !important; text-transform:uppercase !important;
+    cursor:pointer !important; box-shadow:4px 4px 0 0 #000 !important; border-radius:0 !important;
+    transition:all .15s ease;
+}
+quiz-card .reveal-btn:hover { background:#000 !important; color:#fff !important; }
+quiz-card .reveal-btn:active { transform:translate(4px,4px); box-shadow:none !important; }
+quiz-card .answer-section {
+    max-height:0; overflow:hidden; transition:max-height .35s ease;
+    border-top:0; background:transparent;
+}
+quiz-card .answer-section.revealed { max-height:2000px; margin-top:16px; }
+quiz-card .answer-inner { padding:0 24px 24px 24px; }
+quiz-card .answer-block {
+    background:#ffdada !important; border:3px solid #000 !important;
+    padding:16px 20px !important; margin-bottom:12px !important;
+}
+quiz-card .answer-block strong {
+    font-family:"JetBrains Mono",monospace !important; font-size:11px !important;
+    letter-spacing:4px !important; font-weight:700 !important; color:#ba0034 !important;
+    display:block !important; margin-bottom:8px !important;
+}
+quiz-card .answer-block .answer-text {
+    font-family:"JetBrains Mono",monospace !important; font-size:16px !important;
+    line-height:1.55 !important; color:#000 !important; font-weight:400;
+}
+quiz-card .answer-block:nth-child(2) { background:#f7f3f2 !important; }
+quiz-card .answer-block:nth-child(2) strong { color:#0024d9 !important; }
+quiz-card mark.highlight { background:#fa1e4e !important; color:#fff !important; padding:2px 4px; }
+quiz-card .question-image, quiz-card .answer-image { border:3px solid #000 !important; border-radius:0 !important; }
 </style>
 
 <meta name="description" content="200+ curated GK questions, filterable by topic and difficulty.">
