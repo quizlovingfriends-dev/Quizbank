@@ -1,0 +1,21 @@
+{
+  "title": "AI-generated: Nikola tesla",
+  "questions": [
+    {
+      "question_text": "What was the name of the patent office where Nikola Tesla filed his first patent for an electric motor in 1888?",
+      "answer_text": "United States Patent Office",
+      "funda_text": "Tesla's early work on alternating current (AC) motors laid the foundation for modern electrical engineering. His innovations significantly advanced the development of electrical power systems.",
+      "topic": "science",
+      "difficulty": "hard",
+      "question_image_path": null,
+      "answer_image_path": null,
+      "funda_image_path": null
+    }
+  ],
+  "generated_at": "2026-06-06T21:06:51.557260",
+  "meta": {
+    "topic": "Nikola tesla",
+    "difficulty": "hard",
+    "model": "openai/gpt-4o-mini"
+  }
+}

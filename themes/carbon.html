@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>QUIZVAULT — Carbon</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:        #0d0d0d;
+    --surface:   #161616;
+    --border:    #262626;
+    --accent:    #f5f5f5;
+    --muted:     #8a8a8a;
+    --highlight: #00d8a4;
+  }
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    color: var(--accent);
+    padding: 32px;
+    line-height: 1.55;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 80px;
+  }
+  .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+  .logo span { color: var(--highlight); }
+  .nav-links a { color: var(--muted); text-decoration: none; margin-left: 32px; font-weight: 500; font-size: 14px; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+  .hero { margin-bottom: 80px; }
+  .hero .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--highlight); margin-bottom: 16px; letter-spacing: 1px; }
+  .hero h1 {
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .hero p { color: var(--muted); font-size: 19px; max-width: 560px; }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 24px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    font-family: inherit; font-weight: 600; font-size: 14px;
+    cursor: pointer; margin: 24px 8px 0 0;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--border); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); margin-bottom: 64px; }
+  .stat { padding: 28px 32px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-label { color: var(--muted); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+  .stat-value { font-size: 38px; font-weight: 700; margin-top: 8px; letter-spacing: -1px; }
+
+  .section-title { font-size: 13px; font-family: 'JetBrains Mono', monospace; color: var(--muted); margin-bottom: 24px; }
+
+  .cards { display: grid; gap: 16px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--muted); }
+  .card-header { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
+  .card-num { font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 13px; }
+  .badge {
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 3px 10px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .question { font-size: 17px; line-height: 1.6; margin-bottom: 20px; color: #e8e8e8; }
+  .reveal {
+    color: var(--highlight);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .reveal:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav>
+    <div class="logo">Quiz<span>Vault</span></div>
+    <div class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#">Bank</a>
+      <a href="#">Wiki</a>
+      <a href="#">Stats</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow">// THE KNOWLEDGE BANK</div>
+    <h1>QuizVault.</h1>
+    <p>Daily-grown question bank for serious quiz enthusiasts. Practice. Learn. Repeat.</p>
+    <button class="btn">Start practice →</button>
+    <button class="btn btn-ghost">Browse database</button>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">QUESTIONS</div><div class="stat-value">162</div></div>
+    <div class="stat"><div class="stat-label">ACCURACY</div><div class="stat-value">87%</div></div>
+    <div class="stat"><div class="stat-label">STREAK</div><div class="stat-value">12d</div></div>
+  </div>
+
+  <div class="section-title">// RECENT QUESTIONS</div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-header"><span class="card-num">Q.001</span><span class="badge">SPORTS</span></div>
+      <div class="question">Who holds the record for the highest individual score in Test cricket?</div>
+      <a class="reveal">→ reveal answer</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-num">Q.002</span><span class="badge">HISTORY</span></div>
+      <div class="question">Which famous work from 1915 was initially meant as a cold joke about a friend?</div>
+      <a class="reveal">→ reveal answer</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

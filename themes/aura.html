@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>QUIZVAULT — Aura</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:        #08040d;
+    --surface:   #120821;
+    --accent:    #B53DFC;
+    --accent2:   #9C42FF;
+    --soft:      #6B2FB5;
+    --text:      #E8DEFF;
+    --text-dim:  #998BC4;
+  }
+  body {
+    background: radial-gradient(ellipse at top, #2a1052 0%, #08040d 65%);
+    min-height: 100vh;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text);
+    padding: 32px;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(181,61,252,0.15), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(156,66,255,0.12), transparent 40%);
+    z-index: 0;
+  }
+  .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(18,8,33,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(181,61,252,0.2);
+    border-radius: 16px;
+    margin-bottom: 80px;
+  }
+  .logo { font-weight: 700; font-size: 18px; letter-spacing: 1px; background: linear-gradient(135deg, #B53DFC, #E89DFF); -webkit-background-clip: text; color: transparent; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 24px; font-weight: 500; font-size: 14px; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+  .hero { text-align: center; margin-bottom: 80px; }
+  .hero h1 {
+    font-size: clamp(42px, 7vw, 88px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #ffffff 30%, #B53DFC 70%, #6B2FB5);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 16px;
+  }
+  .hero p { color: var(--text-dim); font-size: 18px; }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border: none; border-radius: 12px;
+    font-family: inherit; font-weight: 600; font-size: 14px;
+    cursor: pointer; margin: 24px 8px;
+    box-shadow: 0 4px 20px rgba(181,61,252,0.4);
+    transition: transform 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-ghost { background: transparent; border: 1px solid rgba(181,61,252,0.5); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 64px; }
+  .stat {
+    background: rgba(18,8,33,0.6);
+    border: 1px solid rgba(181,61,252,0.25);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(8px);
+  }
+  .stat-label { color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+  .stat-value { font-size: 36px; font-weight: 700; color: var(--accent); margin-top: 8px; }
+
+  .cards { display: grid; gap: 20px; }
+  .card {
+    background: rgba(18,8,33,0.6);
+    border: 1px solid rgba(181,61,252,0.2);
+    border-radius: 18px;
+    padding: 28px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+  .badge { background: rgba(181,61,252,0.15); color: var(--accent); padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 1px; }
+  .question { font-size: 18px; line-height: 1.5; margin-bottom: 20px; }
+  .reveal { color: var(--accent); cursor: pointer; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav>
+    <div class="logo">QuizVault</div>
+    <div class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#">Bank</a>
+      <a href="#">Wiki</a>
+      <a href="#">Stats</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>QuizVault</h1>
+    <p>The cosmic knowledge terminal</p>
+    <button class="btn">Start Practice</button>
+    <button class="btn btn-ghost">Browse Database</button>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Questions</div><div class="stat-value">162</div></div>
+    <div class="stat"><div class="stat-label">Accuracy</div><div class="stat-value">87%</div></div>
+    <div class="stat"><div class="stat-label">Streak</div><div class="stat-value">12 🔥</div></div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-header"><span style="font-weight:600">Q1</span><span class="badge">SPORTS</span></div>
+      <div class="question">Who holds the record for the highest individual score in Test cricket?</div>
+      <div class="reveal">Reveal answer ↓</div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span style="font-weight:600">Q2</span><span class="badge">HISTORY</span></div>
+      <div class="question">Which famous work from 1915 was initially meant as a cold joke about a friend?</div>
+      <div class="reveal">Reveal answer ↓</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

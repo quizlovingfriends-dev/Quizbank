@@ -1,0 +1,16 @@
+# Quiz Site Automator — Python dependencies
+# Install with: pip install -r requirements.txt
+
+# PDF parsing (installs all three — watcher uses whichever is available)
+pdfplumber>=0.10.0
+pypdf>=3.0.0
+pdfminer.six>=20221105
+
+# PPTX parsing
+python-pptx>=0.6.21
+
+# HTML templating (optional — built-in fallback exists without this)
+Jinja2>=3.1.0
+
+# Folder watching (optional — built-in polling loop is used by default)
+# watchdog>=3.0.0

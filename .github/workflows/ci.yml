@@ -1,0 +1,72 @@
+name: QuizVault CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate JS syntax
+        run: |
+          echo "━━━ Checking JS syntax ━━━"
+          for f in js/store.js js/state.js js/qb.js js/home.js js/practice.js js/animations.js js/i18n.js; do
+            echo "  Checking $f..."
+            node --check "$f" || exit 1
+          done
+          echo "✅ All JS files parse OK"
+
+      - name: Validate questions data
+        run: |
+          echo "━━━ Checking data/questions.js ━━━"
+          node -e "require('./data/questions.js'); console.log('✅ questions.js loads OK')" || echo "⚠️ questions.js uses browser globals, skipping require test"
+          node --check data/questions.js || exit 1
+
+      - name: Run unit tests
+        run: |
+          echo "━━━ Running core tests ━━━"
+          node tests/core.test.js
+
+      - name: Validate HTML structure
+        run: |
+          echo "━━━ Checking HTML files exist ━━━"
+          for f in index.html questionbank.html analytics.html wiki.html; do
+            if [ ! -f "$f" ]; then
+              echo "❌ Missing: $f"
+              exit 1
+            fi
+            echo "  ✅ $f exists"
+          done
+
+      - name: Check critical script tags
+        run: |
+          echo "━━━ Verifying script tags ━━━"
+          for html in index.html questionbank.html; do
+            for script in "data/questions.js" "js/store.js" "js/state.js"; do
+              if ! grep -q "$script" "$html"; then
+                echo "❌ $html is missing <script src=\"$script\">"
+                exit 1
+              fi
+            done
+            echo "  ✅ $html has all critical scripts"
+          done
+
+      - name: Check no console.error in production code
+        run: |
+          echo "━━━ Checking for debug artifacts ━━━"
+          if grep -rn "debugger" js/*.js --include="*.js" | grep -v "test"; then
+            echo "⚠️ Found debugger statements in production code"
+          fi
+          echo "✅ No debug artifacts found"

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "updated_at": "2026-06-07T03:18:10Z",
+  "items": [
+    {
+      "submitted_at": "2026-06-07T03:18:10Z",
+      "source": "ai",
+      "source_meta": {
+        "loaded_from": "data/generated_nikola_tesla_20260606_210703.json"
+      },
+      "question": {
+        "question_text": "What was the name of the patent that Nikola Tesla was granted in 1891 for his invention of the Tesla coil?",
+        "answer_text": "Method of and Apparatus for Electrical Conversions",
+        "funda_text": "The Tesla coil is a high-voltage transformer used in radio technology and is named after Nikola Tesla, who pioneered many electrical innovations. This invention significantly contributed to the development of wireless transmission of electricity.",
+        "topic": "science",
+        "difficulty": "hard",
+        "question_image_path": null,
+        "answer_image_path": null,
+        "funda_image_path": null
+      },
+      "gate": {
+        "score": 100,
+        "verdict": "pending",
+        "issues": [
+          "Source 'ai' — always goes to review (not auto-approve)"
+        ],
+        "auto_fixes": {},
+        "source": "ai"
+      }
+    }
+  ]
+}

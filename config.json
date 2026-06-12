@@ -1,0 +1,41 @@
+{
+  "_comment": "Edit these values to match your setup. Then run: python scripts/watcher.py",
+
+  "paths": {
+    "input_folder":    "D:/QUIZBANK/input",
+    "processed_folder":"D:/QUIZBANK/processed",
+    "index_html":      "D:/QUIZBANK/index.html",
+    "log_file":        "D:/QUIZBANK/logs/automation.log"
+  },
+
+  "api_keys": {
+    "pexels":    "PASTE_YOUR_PEXELS_API_KEY_HERE",
+    "unsplash":  "PASTE_YOUR_UNSPLASH_API_KEY_HERE"
+  },
+
+  "image_source": "pexels",
+
+  "site": {
+    "quiz_inject_marker": "<!-- END_QUIZZES -->",
+    "site_title": "My Quiz Bank",
+    "default_category": "General Knowledge"
+  },
+
+  "watcher": {
+    "poll_interval_seconds": 30,
+    "supported_extensions": [".pdf", ".pptx", ".ppt"]
+  },
+
+  "extraction": {
+    "min_questions_required": 3,
+    "fallback_category_colors": {
+      "Science":          "#0F6E56",
+      "History":          "#533489",
+      "Geography":        "#185FA5",
+      "Sports":           "#993C1D",
+      "General Knowledge":"#444441",
+      "Technology":       "#0C447C",
+      "Entertainment":    "#72243E"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "_comment": "Fill in site_folder and pexels_api_key before running",
+  "site_folder": "D:/QUIZBANK",
+  "input_folder": "./input",
+  "processed_folder": "./processed",
+  "pexels_api_key": "3jv8bOTojuDX92YnpzbZsj0Yy9PEllcFNPdragz2PS9kM80SqwcemFYD",
+  "gemini_api_key": "AIzaSyAZhkIV3T81ZAqwHtPTQix64XFv3eDxNtE",
+  "openrouter_api_key": "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",
+  "github_models_token": "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",
+  "poll_interval_seconds": 30,
+  "min_questions_required": 3,
+  "topic_keywords": {
+    "sports":          ["sport", "cricket", "football", "olympic", "player", "athlete", "match", "team", "stadium"],
+    "wildlife":        ["animal", "tiger", "lion", "bird", "wildlife", "nature", "predator", "flower", "plant", "species"],
+    "history":         ["history", "empire", "ancient", "century", "dynasty", "war", "revolution", "battle", "king", "queen"],
+    "politics":        ["minister", "politics", "government", "election", "president", "parliament", "treaty", "law"],
+    "cuisines":        ["food", "dish", "recipe", "ingredient", "cuisine", "taste", "cook", "restaurant", "spice"],
+    "current-affairs": ["2023", "2024", "2025", "recent", "news", "latest", "current", "today", "launched", "awarded"]
+  }
+}

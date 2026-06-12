@@ -1,0 +1,146 @@
+[
+  {
+    "name": "gsap-core",
+    "path": "skills/gsap-core",
+    "sha": "135754edd728103e329a8df8b471b197375b370e",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-core?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-core",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/135754edd728103e329a8df8b471b197375b370e",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-core?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/135754edd728103e329a8df8b471b197375b370e",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-core"
+    }
+  },
+  {
+    "name": "gsap-frameworks",
+    "path": "skills/gsap-frameworks",
+    "sha": "5b086fa623be801882128fa16b2a9b446d193029",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-frameworks?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-frameworks",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/5b086fa623be801882128fa16b2a9b446d193029",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-frameworks?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/5b086fa623be801882128fa16b2a9b446d193029",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-frameworks"
+    }
+  },
+  {
+    "name": "gsap-performance",
+    "path": "skills/gsap-performance",
+    "sha": "34dec2f051872f8d02df06de97450e448bac9c5e",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-performance?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-performance",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/34dec2f051872f8d02df06de97450e448bac9c5e",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-performance?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/34dec2f051872f8d02df06de97450e448bac9c5e",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-performance"
+    }
+  },
+  {
+    "name": "gsap-plugins",
+    "path": "skills/gsap-plugins",
+    "sha": "e31ccbdb75cf41f0e7df0fec567f6e07956eaca9",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-plugins?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-plugins",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/e31ccbdb75cf41f0e7df0fec567f6e07956eaca9",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-plugins?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/e31ccbdb75cf41f0e7df0fec567f6e07956eaca9",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-plugins"
+    }
+  },
+  {
+    "name": "gsap-react",
+    "path": "skills/gsap-react",
+    "sha": "ac01a338b96fddbc6cf65a89858d2e6068887b39",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-react?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-react",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/ac01a338b96fddbc6cf65a89858d2e6068887b39",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-react?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/ac01a338b96fddbc6cf65a89858d2e6068887b39",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-react"
+    }
+  },
+  {
+    "name": "gsap-scrolltrigger",
+    "path": "skills/gsap-scrolltrigger",
+    "sha": "7838f515e05bfab0a79dd63368a409ddc7d76ee6",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-scrolltrigger?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-scrolltrigger",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/7838f515e05bfab0a79dd63368a409ddc7d76ee6",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-scrolltrigger?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/7838f515e05bfab0a79dd63368a409ddc7d76ee6",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-scrolltrigger"
+    }
+  },
+  {
+    "name": "gsap-timeline",
+    "path": "skills/gsap-timeline",
+    "sha": "37eb5d623c3e14367864d57160acb64f13950994",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-timeline?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-timeline",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/37eb5d623c3e14367864d57160acb64f13950994",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-timeline?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/37eb5d623c3e14367864d57160acb64f13950994",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-timeline"
+    }
+  },
+  {
+    "name": "gsap-utils",
+    "path": "skills/gsap-utils",
+    "sha": "3f7aa617dd2dc7ebf21f30349b9c7b6d8640d789",
+    "size": 0,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-utils?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-utils",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/trees/3f7aa617dd2dc7ebf21f30349b9c7b6d8640d789",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/gsap-utils?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/trees/3f7aa617dd2dc7ebf21f30349b9c7b6d8640d789",
+      "html": "https://github.com/greensock/gsap-skills/tree/main/skills/gsap-utils"
+    }
+  },
+  {
+    "name": "llms.txt",
+    "path": "skills/llms.txt",
+    "sha": "97130f58e94f1019bbca7f709d9bca55dbe11acb",
+    "size": 3111,
+    "url": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/llms.txt?ref=main",
+    "html_url": "https://github.com/greensock/gsap-skills/blob/main/skills/llms.txt",
+    "git_url": "https://api.github.com/repos/greensock/gsap-skills/git/blobs/97130f58e94f1019bbca7f709d9bca55dbe11acb",
+    "download_url": "https://raw.githubusercontent.com/greensock/gsap-skills/main/skills/llms.txt",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/greensock/gsap-skills/contents/skills/llms.txt?ref=main",
+      "git": "https://api.github.com/repos/greensock/gsap-skills/git/blobs/97130f58e94f1019bbca7f709d9bca55dbe11acb",
+      "html": "https://github.com/greensock/gsap-skills/blob/main/skills/llms.txt"
+    }
+  }
+]

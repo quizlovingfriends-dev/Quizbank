@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>QUIZVAULT — Synthwave</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --pink:    #ff2bd6;
+    --cyan:    #00f0ff;
+    --purple:  #4b1cff;
+    --orange:  #ff9300;
+  }
+  body {
+    background: linear-gradient(180deg, #1a0033 0%, #ff2bd6 70%, #ff9300 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: 'Rubik', sans-serif;
+    color: #ffffff;
+    padding: 32px;
+    overflow-x: hidden;
+  }
+  /* Sun & grid */
+  body::before {
+    content: '';
+    position: fixed; bottom: -10vh; left: 50%; transform: translateX(-50%);
+    width: 80vw; height: 80vw;
+    background: radial-gradient(circle, #ffd000 0%, #ff2bd6 50%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.7;
+    z-index: 0;
+    filter: blur(2px);
+  }
+  body::after {
+    content: '';
+    position: fixed; bottom: 0; left: 0; right: 0; height: 50vh;
+    background:
+      linear-gradient(transparent 0%, rgba(255,43,214,0.1) 100%),
+      repeating-linear-gradient(90deg, transparent 0, transparent 49px, rgba(0,240,255,0.4) 49px, rgba(0,240,255,0.4) 50px),
+      repeating-linear-gradient(180deg, transparent 0, transparent 39px, rgba(255,43,214,0.4) 39px, rgba(255,43,214,0.4) 40px);
+    transform: perspective(400px) rotateX(50deg);
+    transform-origin: center bottom;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(26,0,51,0.6);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 20px rgba(0,240,255,0.4);
+    margin-bottom: 80px;
+  }
+  .logo {
+    font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 4px;
+    color: #fff;
+    text-shadow: 0 0 8px var(--pink), 0 0 14px var(--pink);
+  }
+  .nav-links a {
+    color: var(--cyan); text-decoration: none; margin-left: 24px;
+    font-family: 'Orbitron', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 2px;
+    text-shadow: 0 0 4px var(--cyan);
+    transition: all 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--pink); text-shadow: 0 0 8px var(--pink); }
+
+  .hero { text-align: center; margin-bottom: 80px; }
+  .hero .eyebrow { font-family: 'Orbitron', sans-serif; color: var(--cyan); letter-spacing: 8px; font-size: 14px; margin-bottom: 24px; text-shadow: 0 0 8px var(--cyan); }
+  .hero h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(48px, 9vw, 110px);
+    letter-spacing: 4px;
+    background: linear-gradient(180deg, #fff 0%, #ffd000 40%, #ff2bd6 70%, #ff9300 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(255,43,214,0.5);
+    margin-bottom: 16px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 32px;
+    background: linear-gradient(90deg, var(--pink), var(--orange));
+    color: #fff;
+    border: 2px solid var(--cyan);
+    font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 3px;
+    cursor: pointer; margin: 24px 8px;
+    box-shadow: 0 0 16px rgba(255,43,214,0.5), inset 0 0 16px rgba(0,240,255,0.2);
+    text-shadow: 0 0 8px rgba(0,0,0,0.5);
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 24px rgba(255,43,214,0.7); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 64px; }
+  .stat {
+    background: rgba(26,0,51,0.7);
+    border: 2px solid var(--pink);
+    padding: 24px;
+    box-shadow: 0 0 14px rgba(255,43,214,0.4);
+    text-align: center;
+  }
+  .stat-label { color: var(--cyan); font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 3px; }
+  .stat-value { font-family: 'Orbitron', sans-serif; font-size: 38px; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--pink); margin-top: 12px; }
+
+  .cards { display: grid; gap: 16px; }
+  .card {
+    background: rgba(26,0,51,0.75);
+    border: 2px solid var(--cyan);
+    padding: 24px;
+    box-shadow: 0 0 14px rgba(0,240,255,0.3);
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: var(--pink); box-shadow: 0 0 20px rgba(255,43,214,0.5); }
+  .card-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+  .card-num { font-family: 'Orbitron', sans-serif; color: var(--cyan); letter-spacing: 2px; }
+  .badge {
+    background: var(--pink); color: #fff; padding: 4px 12px;
+    font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: 2px;
+    box-shadow: 0 0 10px var(--pink);
+  }
+  .question { font-size: 17px; line-height: 1.5; margin-bottom: 20px; }
+  .reveal { color: var(--cyan); font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 2px; cursor: pointer; text-shadow: 0 0 6px var(--cyan); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav>
+    <div class="logo">QUIZVAULT</div>
+    <div class="nav-links">
+      <a href="#" class="active">HOME</a>
+      <a href="#">BANK</a>
+      <a href="#">WIKI</a>
+      <a href="#">STATS</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow">▼ INSERT KNOWLEDGE ▼</div>
+    <h1>QUIZVAULT</h1>
+    <button class="btn">START PRACTICE</button>
+    <button class="btn">BROWSE DATABASE</button>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">QUESTIONS</div><div class="stat-value">162</div></div>
+    <div class="stat"><div class="stat-label">ACCURACY</div><div class="stat-value">87%</div></div>
+    <div class="stat"><div class="stat-label">STREAK</div><div class="stat-value">12 ★</div></div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-header"><span class="card-num">Q.001</span><span class="badge">SPORTS</span></div>
+      <div class="question">Who holds the record for the highest individual score in Test cricket?</div>
+      <div class="reveal">► REVEAL ANSWER</div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-num">Q.002</span><span class="badge">HISTORY</span></div>
+      <div class="question">Which famous work from 1915 was initially meant as a cold joke about a friend?</div>
+      <div class="reveal">► REVEAL ANSWER</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

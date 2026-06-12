@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>QUIZVAULT — Brutalist</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f3f0e8;
+    --ink:   #0a0a0a;
+    --hot:   #ff3300;
+    --grey:  #555;
+  }
+  body {
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+    background-color: var(--paper);
+    min-height: 100vh;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink);
+    padding: 32px;
+    line-height: 1.4;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 16px 24px;
+    margin-bottom: 64px;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .logo { font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 2px; }
+  .logo span { background: var(--ink); color: var(--paper); padding: 0 6px; }
+  .nav-links a {
+    color: var(--ink); text-decoration: none; margin-left: 24px;
+    text-transform: uppercase; font-weight: 500; font-size: 13px; letter-spacing: 1px;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-links a:hover, .nav-links a.active { border-bottom-color: var(--hot); color: var(--hot); }
+
+  .hero {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 64px 48px;
+    margin-bottom: 64px;
+    box-shadow: 12px 12px 0 var(--ink);
+  }
+  .hero .eyebrow {
+    display: inline-block;
+    background: var(--hot); color: var(--paper);
+    padding: 4px 12px;
+    text-transform: uppercase; font-weight: 700; font-size: 12px; letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(44px, 9vw, 110px);
+    font-weight: 700;
+    line-height: 0.9;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+  .hero p { font-size: 16px; max-width: 600px; margin-bottom: 32px; }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 24px;
+    background: var(--ink); color: var(--paper);
+    border: 3px solid var(--ink);
+    font-family: inherit; font-weight: 700; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 2px;
+    cursor: pointer; margin: 0 8px 0 0;
+    box-shadow: 6px 6px 0 var(--hot);
+    transition: all 0.1s;
+  }
+  .btn:hover { transform: translate(2px, 2px); box-shadow: 4px 4px 0 var(--hot); }
+  .btn-ghost { background: var(--paper); color: var(--ink); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-bottom: 64px; }
+  .stat {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 24px;
+    margin-right: -3px; /* overlap borders */
+  }
+  .stat:last-child { margin-right: 0; }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--grey); }
+  .stat-value { font-size: 48px; font-weight: 700; line-height: 1; margin-top: 8px; }
+
+  .section-title {
+    font-size: 14px; text-transform: uppercase; letter-spacing: 3px;
+    margin-bottom: 24px; padding-bottom: 8px;
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .cards { display: grid; gap: 0; }
+  .card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 28px;
+    margin-bottom: -3px;
+    transition: all 0.1s;
+  }
+  .card:hover { background: var(--ink); color: var(--paper); }
+  .card:hover .reveal { color: var(--hot); }
+  .card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 16px; margin-bottom: 16px;
+    border-bottom: 1px solid currentColor;
+  }
+  .card-num { font-weight: 700; font-size: 14px; text-transform: uppercase; }
+  .badge {
+    background: var(--hot); color: var(--paper);
+    padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .question { font-size: 17px; line-height: 1.5; margin-bottom: 16px; }
+  .reveal {
+    color: var(--ink); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav>
+    <div class="logo">QUIZ<span>VAULT</span></div>
+    <div class="nav-links">
+      <a href="#" class="active">HOME</a>
+      <a href="#">BANK</a>
+      <a href="#">WIKI</a>
+      <a href="#">STATS</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow">QUIZ MACHINE / V2.0</div>
+    <h1>BUILT FOR<br/>THE OBSESSED.</h1>
+    <p>A no-frills, brutally-fast question bank. Type. Answer. Repeat. No animations. No fluff. Just questions.</p>
+    <button class="btn">START_PRACTICE →</button>
+    <button class="btn btn-ghost">BROWSE_DB →</button>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">QUESTIONS</div><div class="stat-value">162</div></div>
+    <div class="stat"><div class="stat-label">ACCURACY</div><div class="stat-value">87%</div></div>
+    <div class="stat"><div class="stat-label">STREAK</div><div class="stat-value">12d</div></div>
+  </div>
+
+  <div class="section-title">▌ RECENT_QUESTIONS</div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-header"><span class="card-num">Q.001</span><span class="badge">SPORTS</span></div>
+      <div class="question">Who holds the record for the highest individual score in Test cricket?</div>
+      <div class="reveal">▶ REVEAL_ANSWER</div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-num">Q.002</span><span class="badge">HISTORY</span></div>
+      <div class="question">Which famous work from 1915 was initially meant as a cold joke about a friend?</div>
+      <div class="reveal">▶ REVEAL_ANSWER</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
