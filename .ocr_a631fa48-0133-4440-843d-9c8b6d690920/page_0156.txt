@@ -1,0 +1,32 @@
+ANSWER
+Akamai's
+domain
+name
+system
+directs
+the
+user
+to
+a
+geographically close-by server that serves the content. Each user
+has to be assigned a server that will be best for them depending
+on traffic_conditions_and_geography and this is done through
+some
+sophisticated algorithms.
+Daniel
+Lewin
+was
+aboard _
+the
+first
+plane
+hijacked
+on
+9/11.
+According to the 9/11 commission, he may have been stabbed _
+one of_the hijackers seated behind him, possibly when he tried
+to confront them:
+Akamai
+Experience the
+bx
+Edge

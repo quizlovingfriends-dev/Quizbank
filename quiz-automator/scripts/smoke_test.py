@@ -24,7 +24,7 @@ ROOT_DIR    = os.path.dirname(SCRIPT_DIR)
 CONFIG_PATH = os.path.join(ROOT_DIR, "config.json")
 
 ALLOWED_TOPICS = {"sports", "wildlife", "current-affairs", "history", "politics",
-                  "cuisines", "general", "literature", "geography", "science"}
+                  "cuisines", "general", "literature", "geography", "science", "movies"}
 
 def load_config():
     with open(CONFIG_PATH, "r", encoding="utf-8") as f:

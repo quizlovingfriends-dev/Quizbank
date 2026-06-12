@@ -76,9 +76,23 @@
         if (typeof QUIZ_QUESTIONS !== 'undefined') {
             QUIZ_QUESTIONS.forEach(function (q) {
                 if (q.type !== 'grid-flip') return;
+
+                // Prefer structured tiles[] (new canonical schema)
+                if (Array.isArray(q.tiles) && q.tiles.length >= 4) {
+                    rounds.push({
+                        id: q.id,
+                        topic: q.topic || 'general',
+                        category: q.category || (q.question || {}).text || 'Category',
+                        tiles: q.tiles,
+                        funda: (q.funda || {}).text || ''
+                    });
+                    return;
+                }
+
+                // Legacy fallback: parse messy OCR string in question.text
                 var parsed = parseGridFlipText((q.question || {}).text || '', q.topic);
                 if (!parsed) return;
-                if (parsed.tiles.length < 4) return; // skip broken/tiny rounds
+                if (parsed.tiles.length < 4) return;
                 rounds.push({
                     id: q.id,
                     topic: q.topic || 'general',

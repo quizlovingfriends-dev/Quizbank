@@ -1,0 +1,20 @@
+ANSWER
+a
+Cuckoo Optimization Algorithm (COA)
+B4
+Bs
+B3
+Cost Fulction F1
+X
+104Current Cost = 0,at Iteratlon = 36
+3
+Bo
+2
+F0
+
+(Local best)
+'Cuckoo _teration
+40
+By (Global optima)
+3
+5

@@ -1,0 +1,87 @@
+Optimization algorithms often use nature based metaphors (often
+frowned upon for lack of academic rigor):
+Looking at these two algorithms, what fauna are they based on?
+Q.
+A)
+Objective
+funceion:
+f(x)
+X =
+(Iu.m2-.
+Ia);
+Generate
+an
+inicial population
+0f
+m
+host
+nests;
+Khile
+(E<MaxGeneration)
+0r
+(stop criterion)
+Get
+randomly
+(say,
+i)
+and replace
+ics
+solucion
+performing Levy flights;
+Evaluate
+its quality/fitness
+F
+23
+(For maximization,
+F & flx )
+J ;
+Choose
+4
+nest among
+n
+(say,
+J)
+randomly;
+if
+(F > F) ,
+Replace
+j
+DY
+che
+new solution;
+end
+1f
+A
+fraceion
+(Pa )
+o1 the
+Forse
+nests
+4fC
+abandoned
+and
+ner
+ones
+are buile;
+Keep
+che
+best
+solucions/nests;
+Rank
+che
+solucions/nests
+and
+find
+che
+currenc besc;
+Pass
+ene
+current
+best
+solutions
+Lo
+ne
+next generation;
+end
+hile
+by

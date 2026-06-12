@@ -1,0 +1,16 @@
+The evocatively named multi-armed bandit problem is a problem
+in reinforcement learning; about the exploration-exploitation
+tradeoff:
+It imagines a gambler at a row of slot machines. Each machine provides rewards through
+0.
+its own probability distribution. At each step, the gambler should decide whether to
+explore other machines to know their expected reward,
+or to exploit the machines
+already know has a high expected reward: How to do this optimally is the problem:
+According to Peter Whittle, this problem was originally conceived
+5
+by Allied scientists during World War 2, and proved very difficult
+to solve, frustrating the scientists.
+What solution did the scientists propose, as a joke, because they
+considered the problem unsolvable?
+they
