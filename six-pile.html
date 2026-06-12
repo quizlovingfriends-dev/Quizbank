@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZVAULT — Six-Pile Round</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+        colors: {
+            "secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec",
+            "surface-container-low":"#f7f3f2","surface-variant":"#e5e2e1",
+            "on-secondary":"#fff","on-primary":"#fff","on-surface-variant":"#444748",
+            "primary":"#000","background":"#fdf8f8"
+        },
+        borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
+        spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
+        fontFamily:{
+            "section-label":["JetBrains Mono"],"body-md":["JetBrains Mono"],
+            "hero-display":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],
+            "ui-button":["JetBrains Mono"]
+        },
+        fontSize:{
+            "section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],
+            "body-md":["14px",{lineHeight:"1.6",letterSpacing:"0",fontWeight:"400"}],
+            "ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],
+            "headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],
+            "headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],
+            "hero-display":["96px",{lineHeight:"1.0",letterSpacing:"-4px",fontWeight:"900"}]
+        }
+    }}
+}
+</script>
+<style>
+body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
+.hard-shadow { box-shadow:6px 6px 0 0 #000; transition:all .2s ease; }
+.hard-shadow:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000; }
+.health-badge { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00c853; margin-left:12px; vertical-align:middle; }
+.health-badge.warning { background:#ffb300; } .health-badge.error { background:#ba1a1a; }
+
+/* =========== Six-pile game ============ */
+.six-pile-wrap { display:flex; flex-direction:column; gap:24px; }
+.six-pile-header { border-bottom:3px solid #000; padding-bottom:16px; }
+.six-pile-scorebar {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+    border:3px solid #000; box-shadow:6px 6px 0 0 #000; background:#fff;
+}
+.six-pile-scorebar > div {
+    padding:16px 20px; border-right:2px solid #000;
+    display:flex; flex-direction:column; gap:4px;
+}
+.six-pile-scorebar > div:last-child { border-right:none; }
+.sb-label { font-size:11px; letter-spacing:4px; font-weight:700; color:#444748; text-transform:uppercase; }
+.sb-value { font-family:"Inter",sans-serif; font-size:36px; font-weight:900; line-height:1; color:#000; }
+
+.six-pile-grid {
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:16px;
+}
+@media (min-width: 768px) { .six-pile-grid { grid-template-columns:repeat(3, 1fr); } }
+
+.six-pile-tile {
+    perspective:1200px; background:transparent; border:none; padding:0;
+    cursor:pointer; min-height:180px;
+}
+.six-pile-tile .tile-inner {
+    position:relative; width:100%; height:100%; min-height:180px;
+    transition:transform .6s cubic-bezier(.65,0,.35,1);
+    transform-style:preserve-3d;
+}
+.six-pile-tile.flipped .tile-inner { transform: rotateY(180deg); }
+
+.tile-front, .tile-back {
+    position:absolute; inset:0; backface-visibility:hidden;
+    border:3px solid #000; box-shadow:6px 6px 0 0 #000;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:20px; text-align:center;
+}
+.tile-front {
+    background:#fdf8f8; color:#000;
+}
+.tile-front:hover { background:#f1edec; }
+
+.six-pile-tile:not(.flipped):hover .tile-inner {
+    transform: translate(-4px,-4px);
+    /* shadow on outer button-equivalent is on .tile-front */
+}
+.six-pile-tile:not(.flipped):active .tile-inner { transform: translate(6px, 6px); }
+
+.tile-num {
+    font-size:11px; letter-spacing:4px; font-weight:700; color:#ba0034;
+    margin-bottom:12px;
+}
+.tile-label {
+    font-family:"Inter", sans-serif; font-size:22px; font-weight:900;
+    line-height:1.1; text-transform:uppercase; letter-spacing:-.5px;
+}
+
+.tile-back {
+    transform: rotateY(180deg);
+    background:#000; color:#fff;
+}
+.tile-back .tile-label { color:#fff; }
+.tile-verdict {
+    font-family:"Inter",sans-serif; font-size:64px; font-weight:900; line-height:1;
+    margin-bottom:8px;
+}
+.six-pile-tile.correct .tile-back { background:#00c853; color:#000; }
+.six-pile-tile.correct .tile-back .tile-label { color:#000; }
+.six-pile-tile.wrong   .tile-back { background:#ba0034; color:#fff; }
+
+.six-pile-tile.revealed .tile-inner { transition:none; }
+
+/* Result panel */
+.six-pile-result {
+    border:3px solid #000; background:#000; color:#fff;
+    box-shadow:6px 6px 0 0 #000; padding:32px;
+}
+.result-score {
+    font-family:"Inter",sans-serif; font-size:96px; font-weight:900; line-height:1;
+    letter-spacing:-4px;
+}
+.result-funda {
+    margin-top:24px; padding:16px; border:2px solid #444748; background:#1c1b1b;
+    font-size:14px; line-height:1.6;
+}
+.result-funda strong {
+    display:block; font-size:11px; letter-spacing:4px; color:#ba0034;
+    margin-bottom:8px;
+}
+.result-buttons {
+    display:flex; flex-direction:column; gap:12px; margin-top:24px;
+}
+@media (min-width: 768px) {
+    .result-buttons { flex-direction:row; }
+}
+</style>
+
+<meta name="description" content="QuizVault Six-Pile — category-round ladder game. Pick the right ones; first wrong ends the round.">
+<link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body class="text-primary font-body-md min-h-screen flex flex-col">
+
+<!-- NAVBAR -->
+<nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4">
+    <a class="navbar-logo font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html">QUIZVAULT</a>
+    <div class="navbar-links hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase">
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="index.html">HOME</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="questionbank.html">BANK</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="practice.html">PRACTICE</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="daily.html">DAILY</a>
+        <a class="navbar-link active text-secondary font-bold border-b-2 border-secondary pb-1" href="six-pile.html" aria-current="page">SIX-PILE</a>
+        <a class="navbar-link text-primary opacity-80 hover:text-secondary pb-1" href="how-to-use.html">HOW-TO</a>
+        <span id="site-health" class="health-badge" title="Site status">●</span>
+    </div>
+    <a href="practice.html" class="hidden md:flex bg-secondary text-on-secondary px-6 py-3 font-ui-button text-ui-button uppercase border-[3px] border-black hard-shadow">START_PRACTICE →</a>
+</nav>
+
+<main class="flex-grow w-full max-w-5xl mx-auto px-4 md:px-margin py-12 flex flex-col gap-8">
+    <div id="six-pile-stage"></div>
+</main>
+
+<footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4 mt-auto">
+    <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+    <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
+        <a class="hover:text-secondary" href="index.html">HOME</a>
+        <a class="hover:text-secondary" href="questionbank.html">BANK</a>
+        <a class="hover:text-secondary" href="how-to-use.html">HOW-TO</a>
+    </div>
+</footer>
+
+<!-- DO NOT REMOVE: DATA LOADING -->
+<script src="data/questions.js"></script>
+<script src="data/six-pile.js"></script>
+<script src="js/error-boundary.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sanitizer.js"></script>
+<script src="js/state.js"></script>
+<script src="js/six-pile.js"></script>
+
+<script>
+(function() {
+    var badge = document.getElementById('site-health');
+    if (!badge) return;
+    var qCount = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.length : 0;
+    if (qCount === 0)      { badge.classList.add('error');   badge.title = 'CRITICAL: questions.js failed to load'; }
+    else if (qCount < 50)  { badge.classList.add('warning'); badge.title = qCount + ' questions loaded (low)'; }
+    else                   { badge.title = qCount + ' questions loaded — OK'; }
+})();
+</script>
+</body>
+</html>
