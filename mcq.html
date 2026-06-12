@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZVAULT — Multiple Choice</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { darkMode:"class", theme:{ extend:{
+    colors:{"secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec","surface-container-low":"#f7f3f2","surface-variant":"#e5e2e1","on-secondary":"#fff","on-primary":"#fff","on-surface-variant":"#444748","primary":"#000","background":"#fdf8f8"},
+    borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
+    spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
+    fontFamily:{"section-label":["JetBrains Mono"],"body-md":["JetBrains Mono"],"hero-display":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],"ui-button":["JetBrains Mono"]},
+    fontSize:{"section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],"body-md":["14px",{lineHeight:"1.6",letterSpacing:"0",fontWeight:"400"}],"ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],"headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],"headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],"hero-display":["96px",{lineHeight:"1.0",letterSpacing:"-4px",fontWeight:"900"}]}
+}}}
+</script>
+<style>
+body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
+.hard-shadow { box-shadow:6px 6px 0 0 #000; transition:all .2s ease; }
+.hard-shadow:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000; }
+.health-badge { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00c853; margin-left:12px; vertical-align:middle; }
+.health-badge.warning { background:#ffb300; } .health-badge.error { background:#ba1a1a; }
+.mcq-option:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 0 #000; }
+</style>
+<link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body class="text-primary font-body-md min-h-screen flex flex-col">
+<nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4">
+    <a class="navbar-logo font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html">QUIZVAULT</a>
+    <div class="hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase">
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="index.html">HOME</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="questionbank.html">BANK</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="practice.html">PRACTICE</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="connect.html">CONNECT</a>
+        <a class="active text-secondary font-bold border-b-2 border-secondary pb-1" href="mcq.html" aria-current="page">MCQ</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="types.html">MORE</a>
+        <span id="site-health" class="health-badge" title="Site status">●</span>
+    </div>
+</nav>
+<main class="flex-grow w-full max-w-4xl mx-auto px-4 md:px-margin py-12">
+    <div id="mcq-stage"></div>
+</main>
+<footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4 mt-auto">
+    <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+    <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
+        <a class="hover:text-secondary" href="index.html">HOME</a>
+        <a class="hover:text-secondary" href="how-to-use.html">HOW-TO</a>
+    </div>
+</footer>
+<script src="data/questions.js"></script>
+<script src="data/extras.js"></script>
+<script src="js/error-boundary.js"></script>
+<script src="js/sanitizer.js"></script>
+<script src="js/store.js"></script>
+<script src="js/state.js"></script>
+<script src="js/mcq.js"></script>
+<script>(function(){var b=document.getElementById('site-health');if(!b)return;var c=(typeof QUIZ_QUESTIONS!=='undefined')?QUIZ_QUESTIONS.length:0;if(c===0){b.classList.add('error');b.title='CRITICAL';}else if(c<50){b.classList.add('warning');b.title=c+' (low)';}else{b.title=c+' OK';}})();</script>
+</body>
+</html>

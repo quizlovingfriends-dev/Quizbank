@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZVAULT — All Question Types</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { darkMode:"class", theme:{ extend:{
+    colors:{"secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec","surface-container-low":"#f7f3f2","surface-variant":"#e5e2e1","on-secondary":"#fff","on-primary":"#fff","on-surface-variant":"#444748","primary":"#000","background":"#fdf8f8"},
+    borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
+    spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
+    fontFamily:{"section-label":["JetBrains Mono"],"body-md":["JetBrains Mono"],"hero-display":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],"ui-button":["JetBrains Mono"]},
+    fontSize:{"section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],"body-md":["14px",{lineHeight:"1.6",letterSpacing:"0",fontWeight:"400"}],"ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],"headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],"headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],"hero-display":["96px",{lineHeight:"1.0",letterSpacing:"-4px",fontWeight:"900"}]}
+}}}
+</script>
+<style>
+body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
+.hard-shadow { box-shadow:6px 6px 0 0 #000; transition:all .2s ease; }
+.hard-shadow:hover { transform:translate(-4px,-4px); box-shadow:10px 10px 0 0 #000; }
+.health-badge { display:inline-block; width:10px; height:10px; border-radius:50%; background:#00c853; margin-left:12px; vertical-align:middle; }
+.type-tile { display:flex; flex-direction:column; gap:12px; padding:24px; }
+.type-icon { font-family:"Inter",sans-serif; font-size:48px; font-weight:900; line-height:1; }
+</style>
+<link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body class="text-primary font-body-md min-h-screen flex flex-col">
+<nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4">
+    <a class="navbar-logo font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html">QUIZVAULT</a>
+    <div class="hidden md:flex gap-gutter items-center font-body-md text-body-md uppercase">
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="index.html">HOME</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="questionbank.html">BANK</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="practice.html">PRACTICE</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="daily.html">DAILY</a>
+        <a class="active text-secondary font-bold border-b-2 border-secondary pb-1" href="types.html" aria-current="page">TYPES</a>
+        <a class="text-primary opacity-80 hover:text-secondary pb-1" href="how-to-use.html">HOW-TO</a>
+        <span id="site-health" class="health-badge" title="Site status">●</span>
+    </div>
+</nav>
+
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 md:px-margin py-12">
+    <header class="border-b-[3px] border-black pb-6 mb-12">
+        <div class="font-section-label text-section-label uppercase text-on-surface-variant">PROTOCOL // TYPE INDEX</div>
+        <h1 class="font-headline-lg-mobile md:font-headline-lg font-black uppercase tracking-tighter mt-2">QUESTION TYPES</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-4 max-w-2xl">
+            Eight different ways to test what you know. Each type drills a different muscle —
+            recall, recognition, ordering, association, elimination.
+        </p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+
+        <a href="practice.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon text-secondary">→</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">PRACTICE</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-practice">—</span> SHORT-ANSWER QS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Type-and-verify with timer, streak, +1 popup. SM-2 tracks weak cards.</div>
+        </a>
+
+        <a href="questionbank.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon">▦</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">QUESTION BANK</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-standard">—</span> STANDARD QS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Browse the full vault, filter by topic and difficulty, save to wiki.</div>
+        </a>
+
+        <a href="progressive.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon" style="color:#0024d9;">⫶</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">PROGRESSIVE</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-progressive">—</span> MULTI-PART QS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Multi-part questions revealed one bite at a time. Self-grade each part.</div>
+        </a>
+
+        <a href="six-pile.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon" style="color:#00c853;">⫷</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">SIX-PILE</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-grid-flip">—</span> CATEGORY ROUNDS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Pick the right ones in a category. +1 per correct; first wrong ends the round.</div>
+        </a>
+
+        <a href="connect.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon" style="color:#ba0034;">∞</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">CONNECT</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-connect">—</span> 3-CLUE ROUNDS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Three clues, one common link. Guess early for max points.</div>
+        </a>
+
+        <a href="odd-one-out.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon">⊘</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">ODD-ONE-OUT</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-odd-one-out">—</span> ELIMINATION ROUNDS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">N items, one doesn't fit the pattern. Pick the odd one.</div>
+        </a>
+
+        <a href="mcq.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon" style="color:#0024d9;">A·B·C·D</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">MULTIPLE CHOICE</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-mcq">—</span> MCQ ROUNDS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Pick one of four options. Classic, fast, exam-prep style.</div>
+        </a>
+
+        <a href="sequence.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon" style="color:#ba0034;">1·2·3</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">SEQUENCE</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant"><span id="ct-sequence">—</span> ORDERING ROUNDS</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Click items in the correct order. Chronology, height, distance, anything.</div>
+        </a>
+
+        <a href="daily.html" class="bg-surface border-[3px] border-black hard-shadow type-tile">
+            <div class="type-icon">◉</div>
+            <div class="font-headline-lg-mobile font-black uppercase tracking-tighter">DAILY BRIEFING</div>
+            <div class="font-section-label text-section-label uppercase text-on-surface-variant">5 QUESTIONS · SAME FOR EVERYONE</div>
+            <div class="font-body-md text-body-md text-on-surface-variant">Deterministic five-question round seeded by today's date.</div>
+        </a>
+
+    </div>
+</main>
+
+<footer class="bg-surface border-t-2 border-black flex flex-col md:flex-row justify-between items-center w-full px-margin py-8 gap-4 mt-auto">
+    <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+    <div class="flex gap-gutter font-section-label text-section-label tracking-[4px] uppercase text-primary">
+        <a class="hover:text-secondary" href="index.html">HOME</a>
+        <a class="hover:text-secondary" href="how-to-use.html">HOW-TO</a>
+    </div>
+</footer>
+
+<script src="data/questions.js"></script>
+<script src="data/extras.js"></script>
+
+<script>
+(function(){
+    var b = document.getElementById('site-health');
+    var qs = (typeof QUIZ_QUESTIONS!=='undefined') ? QUIZ_QUESTIONS : [];
+    if (b) {
+        if (qs.length === 0) { b.classList.add('error');  b.title='CRITICAL'; }
+        else if (qs.length < 50) { b.classList.add('warning'); b.title=qs.length+' (low)'; }
+        else { b.title=qs.length+' OK'; }
+    }
+    // Live counts per type
+    function shortPredicate(q) {
+        if (q.type && q.type !== 'standard' && q.type !== 'qa') return false;
+        var ans = ((q.answer || {}).text || '').replace(/<[^>]+>/g,'').trim();
+        if (!ans) return false;
+        var first = ans.split(/[.!?]/)[0].trim();
+        var words = first.split(/\s+/).filter(Boolean);
+        return words.length <= 6 && first.length <= 45;
+    }
+    function setText(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+
+    var counts = { standard:0, progressive:0, 'grid-flip':0, connect:0, 'odd-one-out':0, mcq:0, sequence:0 };
+    qs.forEach(function (q) {
+        var t = q.type || 'standard';
+        if (counts[t] !== undefined) counts[t]++;
+    });
+    counts.connect       += (typeof CONNECT_QUESTIONS       !== 'undefined') ? CONNECT_QUESTIONS.length       : 0;
+    counts['odd-one-out']+= (typeof ODD_ONE_OUT_QUESTIONS    !== 'undefined') ? ODD_ONE_OUT_QUESTIONS.length    : 0;
+    counts.mcq           += (typeof MCQ_QUESTIONS           !== 'undefined') ? MCQ_QUESTIONS.length           : 0;
+    counts.sequence      += (typeof SEQUENCE_QUESTIONS      !== 'undefined') ? SEQUENCE_QUESTIONS.length      : 0;
+
+    setText('ct-standard',     counts.standard);
+    setText('ct-progressive',  counts.progressive);
+    setText('ct-grid-flip',    counts['grid-flip']);
+    setText('ct-connect',      counts.connect);
+    setText('ct-odd-one-out',  counts['odd-one-out']);
+    setText('ct-mcq',          counts.mcq);
+    setText('ct-sequence',     counts.sequence);
+    setText('ct-practice',     qs.filter(shortPredicate).length);
+})();
+</script>
+</body>
+</html>

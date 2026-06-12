@@ -31,6 +31,21 @@
         return (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS.slice() : [];
     }
 
+    // Practice mode is for SHORT-answer questions only — one or two words,
+    // names, dates, single facts. Anything that needs an explanation belongs
+    // in the question bank, not practice.
+    function isShortAnswer(q) {
+        if (q.type && q.type !== 'standard' && q.type !== 'qa') return false; // skip progressive/grid-flip etc.
+        var ans = ((q.answer || {}).text || q.answer_text || '').replace(/<[^>]+>/g, '').trim();
+        if (!ans) return false;
+        // Take only the first sentence (typed-answer focus is the first claim)
+        var firstSentence = ans.split(/[.!?]/)[0].trim();
+        var words = firstSentence.split(/\s+/).filter(Boolean);
+        // Allow up to 6 words OR up to 45 chars — covers names, places, dates,
+        // short phrases like "Samuel Morse", "1989", "Pacific Ocean", "Indira Gandhi"
+        return words.length <= 6 && firstSentence.length <= 45;
+    }
+
     function normalize(s) {
         return (s || '').toLowerCase()
             .replace(/[^\w\s]/g, '')
@@ -73,7 +88,7 @@
     }
 
     function pickSession(opts) {
-        var pool = getQuestions();
+        var pool = getQuestions().filter(isShortAnswer);
         if (opts.topic)      pool = pool.filter(function (q) { return q.topic === opts.topic; });
         if (opts.difficulty) pool = pool.filter(function (q) { return q.difficulty === opts.difficulty; });
         if (opts.source === 'weak') {
