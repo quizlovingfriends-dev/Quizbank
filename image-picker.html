@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUIZVAULT — Image Picker</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { darkMode:"class", theme:{ extend:{
+    colors:{"secondary":"#ba0034","surface":"#fdf8f8","surface-container":"#f1edec","surface-container-low":"#f7f3f2","surface-variant":"#e5e2e1","on-secondary":"#fff","on-primary":"#fff","on-surface-variant":"#444748","primary":"#000","background":"#fdf8f8"},
+    borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"0px"},
+    spacing:{margin:"32px","border-weight":"3px","rule-weight":"2px",gutter:"24px"},
+    fontFamily:{"section-label":["JetBrains Mono"],"body-md":["JetBrains Mono"],"hero-display":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],"ui-button":["JetBrains Mono"]},
+    fontSize:{"section-label":["11px",{lineHeight:"16px",letterSpacing:"4px",fontWeight:"700"}],"body-md":["14px",{lineHeight:"1.6",letterSpacing:"0",fontWeight:"400"}],"ui-button":["16px",{lineHeight:"1",letterSpacing:"1px",fontWeight:"700"}],"headline-lg-mobile":["32px",{lineHeight:"1.1",letterSpacing:"-1px",fontWeight:"900"}],"headline-lg":["48px",{lineHeight:"1.1",letterSpacing:"-2px",fontWeight:"900"}],"hero-display":["96px",{lineHeight:"1.0",letterSpacing:"-4px",fontWeight:"900"}]}
+}}}
+</script>
+<style>
+body { background:#fdf8f8; font-family:"JetBrains Mono", monospace; }
+.hard-shadow { box-shadow:6px 6px 0 0 #000; }
+.thumb { width:100%; aspect-ratio:4/3; object-fit:cover; cursor:pointer; border:3px solid #000; background:#f7f3f2; transition:all .15s; }
+.thumb:hover { transform:translate(-4px,-4px); box-shadow:8px 8px 0 0 #000; }
+.thumb.assigned { opacity:.4; }
+.thumb.current { border-color:#ba0034; box-shadow:8px 8px 0 0 #ba0034; }
+</style>
+</head>
+<body class="text-primary font-body-md min-h-screen flex flex-col">
+<nav class="navbar sticky top-0 z-50 bg-surface border-b-2 border-black flex justify-between items-center w-full px-margin py-4">
+    <a class="font-hero-display text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter" href="index.html">QUIZVAULT</a>
+    <div class="flex gap-gutter items-center font-body-md text-body-md uppercase">
+        <a class="hover:text-secondary" href="index.html">HOME</a>
+        <a class="text-secondary font-bold" href="image-picker.html">IMAGE PICKER</a>
+    </div>
+</nav>
+
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 md:px-margin py-8 flex flex-col gap-6">
+    <header class="border-b-[3px] border-black pb-4">
+        <div class="font-section-label text-section-label uppercase text-on-surface-variant">ADMIN // IMAGE PICKER</div>
+        <h1 class="font-headline-lg-mobile md:font-headline-lg font-black uppercase tracking-tighter mt-2">ATTACH IMAGES TO QUESTIONS</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-4 max-w-2xl">
+            Walk through every question. Click a thumbnail from <code>images/cirs/</code> to attach it. Click again to unassign.
+            All assignments save to <code>localStorage</code> and you can export the mapping to JSON to apply to <code>questions.js</code>.
+        </p>
+        <div class="flex gap-3 mt-4 flex-wrap">
+            <button id="btn-only-need-image" class="bg-primary text-on-primary px-4 py-2 font-section-label text-section-label uppercase border-[3px] border-black hard-shadow">SHOW ONLY IMAGE-NEEDING QS</button>
+            <button id="btn-show-all" class="bg-transparent text-primary px-4 py-2 font-section-label text-section-label uppercase border-[3px] border-black hard-shadow">SHOW ALL</button>
+            <button id="btn-export" class="bg-secondary text-on-secondary px-4 py-2 font-section-label text-section-label uppercase border-[3px] border-black hard-shadow">EXPORT MAPPING JSON</button>
+            <button id="btn-clear" class="bg-transparent text-secondary px-4 py-2 font-section-label text-section-label uppercase border-[3px] border-secondary hard-shadow">CLEAR ALL</button>
+            <button id="btn-jump-next" class="bg-transparent text-primary px-4 py-2 font-section-label text-section-label uppercase border-[3px] border-black hard-shadow">JUMP TO NEXT UNASSIGNED</button>
+        </div>
+        <div class="font-section-label text-section-label uppercase mt-3">
+            <span id="progress-count">—</span> ASSIGNED · <span id="needed-count">—</span> IMAGE-NEEDING · <span id="total-count">—</span> TOTAL
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <!-- Left: question list -->
+        <aside class="lg:col-span-4 max-h-[80vh] overflow-y-auto border-[3px] border-black bg-surface p-4 hard-shadow">
+            <div id="q-list" class="flex flex-col gap-2"></div>
+        </aside>
+
+        <!-- Right: current question + image gallery -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+            <div id="current-question" class="border-[3px] border-black bg-surface hard-shadow p-6 min-h-[120px]"></div>
+
+            <div class="flex justify-between items-baseline">
+                <h2 class="font-section-label text-section-label uppercase">SOURCE IMAGES (CIRS)</h2>
+                <input id="img-filter" type="text" placeholder="filter by number…" class="border-2 border-black p-2 font-body-md text-body-md w-48">
+            </div>
+            <div id="gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+        </section>
+    </div>
+</main>
+
+<footer class="bg-surface border-t-2 border-black px-margin py-6 mt-auto">
+    <div class="font-section-label text-section-label font-bold text-primary">© 2026 QUIZVAULT WIRE SERVICE</div>
+</footer>
+
+<script src="data/questions.js"></script>
+<script>
+(function() {
+    'use strict';
+    var SOURCE_DIR = 'images/cirs/';
+    var IMAGE_COUNT = 79;
+    var STORAGE_KEY = 'qv_image_mapping';
+
+    // Build image list (image1.jpg … image79.jpg, skipping missing image24)
+    var allImages = [];
+    for (var i = 1; i <= IMAGE_COUNT; i++) {
+        if (i === 24) continue;
+        allImages.push(SOURCE_DIR + 'image' + i + '.jpg');
+    }
+
+    function strip(s) { return (s || '').replace(/<[^>]+>/g, ''); }
+
+    function needsImage(q) {
+        var t = strip((q.question || {}).text || '');
+        return /pictured|identify|\bid\b\s*(?:the|this|x|y)|attach\s*image|observe|\bnote\b|cover\b|poster\b|self-?portrait|painting|advertisement|logo|flag\b/i.test(t);
+    }
+
+    var mapping = {};
+    try { mapping = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) { mapping = {}; }
+
+    var qs = (typeof QUIZ_QUESTIONS !== 'undefined') ? QUIZ_QUESTIONS : [];
+    var filter = 'need-image'; // need-image | all
+    var currentQid = null;
+
+    function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(mapping));
+        refreshCounts();
+    }
+
+    function refreshCounts() {
+        var assigned = Object.keys(mapping).length;
+        var needing  = qs.filter(needsImage).length;
+        document.getElementById('progress-count').textContent = assigned;
+        document.getElementById('needed-count').textContent   = needing;
+        document.getElementById('total-count').textContent    = qs.length;
+    }
+
+    function renderList() {
+        var pool = filter === 'need-image' ? qs.filter(needsImage) : qs;
+        var html = pool.map(function (q) {
+            var hasImg = !!mapping[q.id];
+            var preview = strip((q.question || {}).text || '').slice(0, 80);
+            return (
+                '<button class="q-row text-left border-2 border-black p-3 hover:bg-surface-container-low ' +
+                    (q.id === currentQid ? 'bg-secondary text-on-secondary' : '') + '" data-qid="' + q.id + '">' +
+                    '<div class="flex justify-between items-baseline">' +
+                        '<span class="font-section-label text-section-label">Q.' + String(q.id).padStart(3, '0') + ' · ' + (q.type || 'standard') + '</span>' +
+                        '<span class="font-section-label text-section-label">' + (hasImg ? '✓' : '○') + '</span>' +
+                    '</div>' +
+                    '<div class="font-body-md text-[12px] mt-1 leading-snug">' + escape(preview) + '…</div>' +
+                '</button>'
+            );
+        }).join('');
+        document.getElementById('q-list').innerHTML = html;
+        document.querySelectorAll('.q-row').forEach(function (el) {
+            el.addEventListener('click', function () { selectQ(parseInt(el.dataset.qid, 10)); });
+        });
+    }
+
+    function escape(s) {
+        return (s || '').replace(/[&<>"']/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]; });
+    }
+
+    function selectQ(qid) {
+        currentQid = qid;
+        var q = qs.filter(function (x) { return x.id === qid; })[0];
+        if (!q) return;
+        var box = document.getElementById('current-question');
+        var assigned = mapping[qid];
+        var qText = strip((q.question || {}).text || '');
+        var aText = strip((q.answer || {}).text || '');
+        box.innerHTML =
+            '<div class="font-section-label text-section-label uppercase text-on-surface-variant mb-2">' +
+                'Q.' + String(qid).padStart(3, '0') + ' · ' + (q.topic || '—') + ' · ' + (q.type || 'standard') + ' · ' + (q.round || '—') +
+            '</div>' +
+            '<div class="font-body-md text-[16px] font-bold mb-3">' + escape(qText) + '</div>' +
+            '<div class="font-body-md text-[14px] text-on-surface-variant"><strong>ANSWER:</strong> ' + escape(aText) + '</div>' +
+            (assigned ?
+                '<div class="mt-4 flex items-center gap-4">' +
+                    '<img src="' + assigned + '" style="max-height:120px; border:3px solid #000;">' +
+                    '<button id="btn-unassign" class="bg-secondary text-on-secondary px-3 py-2 font-section-label text-section-label uppercase border-[3px] border-black">UNASSIGN</button>' +
+                '</div>' : '');
+        if (assigned) {
+            document.getElementById('btn-unassign').addEventListener('click', function () {
+                delete mapping[qid]; save(); selectQ(qid); renderList(); renderGallery();
+            });
+        }
+        renderList();
+        renderGallery();
+    }
+
+    function renderGallery() {
+        var q = document.getElementById('img-filter').value.trim();
+        var pool = allImages;
+        if (q) {
+            pool = pool.filter(function (p) { return p.indexOf('image' + q) !== -1; });
+        }
+        // Build set of assigned-to-others
+        var taken = {};
+        Object.keys(mapping).forEach(function (k) {
+            if (parseInt(k, 10) !== currentQid) taken[mapping[k]] = parseInt(k, 10);
+        });
+        var current = currentQid ? mapping[currentQid] : null;
+        var html = pool.map(function (path) {
+            var label = path.match(/image(\d+)/)[1];
+            var classes = ['thumb'];
+            if (taken[path]) classes.push('assigned');
+            if (path === current) classes.push('current');
+            return (
+                '<div class="flex flex-col gap-1">' +
+                    '<img src="' + path + '" class="' + classes.join(' ') + '" data-path="' + path + '" loading="lazy">' +
+                    '<div class="font-section-label text-section-label uppercase text-center">' +
+                        'img' + label +
+                        (taken[path] ? ' → Q' + taken[path] : '') +
+                    '</div>' +
+                '</div>'
+            );
+        }).join('');
+        document.getElementById('gallery').innerHTML = html;
+        document.querySelectorAll('.thumb').forEach(function (el) {
+            el.addEventListener('click', function () {
+                if (!currentQid) { alert('Select a question first'); return; }
+                var path = el.dataset.path;
+                // Remove this path from any other question
+                Object.keys(mapping).forEach(function (k) { if (mapping[k] === path) delete mapping[k]; });
+                if (mapping[currentQid] === path) delete mapping[currentQid];
+                else mapping[currentQid] = path;
+                save(); selectQ(currentQid);
+            });
+        });
+    }
+
+    document.getElementById('btn-only-need-image').addEventListener('click', function () { filter = 'need-image'; renderList(); });
+    document.getElementById('btn-show-all').addEventListener('click', function () { filter = 'all'; renderList(); });
+    document.getElementById('btn-export').addEventListener('click', function () {
+        var blob = new Blob([JSON.stringify(mapping, null, 2)], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = 'image_mapping.json';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+    });
+    document.getElementById('btn-clear').addEventListener('click', function () {
+        if (confirm('Erase all image assignments?')) { mapping = {}; save(); renderList(); renderGallery(); if (currentQid) selectQ(currentQid); }
+    });
+    document.getElementById('btn-jump-next').addEventListener('click', function () {
+        var pool = filter === 'need-image' ? qs.filter(needsImage) : qs;
+        var next = pool.filter(function (q) { return !mapping[q.id]; })[0];
+        if (next) selectQ(next.id);
+        else alert('All assigned!');
+    });
+    document.getElementById('img-filter').addEventListener('input', renderGallery);
+
+    refreshCounts();
+    renderList();
+    renderGallery();
+    // Auto-select first image-needing question
+    var first = qs.filter(needsImage)[0];
+    if (first) selectQ(first.id);
+})();
+</script>
+</body>
+</html>
